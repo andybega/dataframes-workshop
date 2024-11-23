@@ -1,0 +1,203 @@
+---
+title: "Python dataframes with pandas and polars"
+author: "Andreas Beger and Isaac Chung <br/> PyData Tallinn x Python CodeClub <br/> 27 November 2024"
+format: 
+    revealjs:
+        theme: [default, styles.scss]
+---
+
+## Bios
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Andreas Beger**
+
+- 🏢 Data Scientist, Consult.
+- 🏃‍♂️🐌 Slow marathoner
+- 📍 🇩🇪/🇭🇷 → 🇺🇸 → 🇪🇪
+- 🎓 PhD Political Science
+
+:::
+
+::: {.column width="50%"}
+**Isaac Chung**
+
+- 🏢 Staff Data Scientist, Wrike
+- 🏊‍♂️🚴🏃‍♂️ Fast triathloner
+- 📍 🇭🇰 → 🇨🇦 → 🇪🇪
+- 🎓 MS Machine Learning
+
+:::
+
+****
+
+🐍 We are also the PyData Tallinn co-organizers.
+
+::::
+
+## Link to notebooks
+
+TODO add QR code for repo
+
+## Getting setup
+
+Instructions for how to follow along in notebooks...GitHub codespaces?
+
+# What are dataframes?
+
+## Definition
+
+Tables, 2d arrays, etc. 
+
+## Why?
+
+Show a list of python dictionaries 
+
+vs
+
+pandas data frame
+
+## Common dataframe operations
+
+:::: {.columns .v-center-container}
+
+::: {.column width="50%"}
+
+- 📖 ✍️ read and write
+- 🔬 inspect
+- 🔍 filter rows
+- 🛒 select columns
+
+:::
+
+::: {.column width="50%"}
+
+- 🥪 mutate, add columns
+- 🤝 join other dataframes
+- 👨‍👩‍👧‍👦 group and aggregate
+- 🧱 reshape wide, long
+
+:::
+
+::::
+
+# pandas
+
+![](media/pandas-logo.png)
+
+## History
+
+Wes McKinney
+
+originally built on top of numpy
+pandas 2 () adds support for arrow backend
+
+## examples
+
+## pandas is great
+
+
+. . .
+
+<br/>
+2017, Wes McKinney (creator of pandas):
+
+. . . 
+
+> **10 Things I Hate About Pandas **
+
+. . . 
+
+- Inefficient memory management, need 5-10x data size
+- Eager evaluation → limited query planning
+- No multi-core
+
+
+::: aside
+[https://wesmckinney.com/blog/apache-arrow-pandas-internals/](https://wesmckinney.com/blog/apache-arrow-pandas-internals/)
+:::
+
+## Arrow
+
+2016 Apache Arrow as common in-memory data representation standard
+
+# polars
+
+![](media/polars-logo.jpg)
+
+
+
+## History
+
+2020 Ritchie Vink
+
+Uses arrow as internal representation
+
+## new slides
+
+- Out with indices
+- Out with `.loc`, `.iloc`
+- Out with `[`
+- In with lazy evaluation
+- Expressions
+
+## Easy to convert between the two
+
+```python
+df = df.to_pandas()
+df = pl.from_pandas(df)
+```
+
+## example
+
+go through same example again, but with polars
+
+# The big picture
+
+## Andy is a polars stan {.smaller}
+
+
+![](media/star-history.png){width=60% fig-align="center"}
+
+::: aside
+https://star-history.com/#apache/spark&pola-rs/polars&pandas-dev/pandas&narwhals-dev/narwhals&duckdb/duckdb&Date 
+:::
+
+## Comparison
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**pandas**
+
+- ✅ Very widely used and supported
+- ✅ Stable
+- ❓ More imperative, traditional API
+- ❌ Inconsistent API, multiple ways of doing the same thing
+
+:::
+
+::: {.column width="50%"}
+
+**polars**
+
+- ✅ More consistent, functional-style API
+- ✅ Faster, less memory footprint
+- ✅ Works with OOM datasets out of the box
+- ❌ API still changing
+
+:::
+
+::::
+
+
+## Other frameworks
+
+- Narwhal
+- DuckDB
+
+## Thank you!
+
+QR code for feedback?
