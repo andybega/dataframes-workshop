@@ -93,7 +93,25 @@ Wes McKinney
 originally built on top of numpy
 pandas 2 () adds support for arrow backend
 
-## examples
+## Getting started {.smaller}
+
+```{python}
+#| echo: true
+import numpy as np
+import pandas as pd
+
+df = pd.DataFrame({
+    "quarter": [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4],
+    "x": np.random.randn(12),
+    "date": pd.date_range("2024-01-01", periods=12, freq="MS")
+})
+
+df.head()
+
+```
+
+## Import accidents data
+
 
 ## pandas is great
 
