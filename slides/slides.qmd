@@ -11,7 +11,7 @@ format:
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="47%"}
 **Andreas Beger**
 
 - 🏢 Data Scientist, Consult.
@@ -21,11 +21,11 @@ format:
 
 :::
 
-::: {.column width="50%"}
+::: {.column width="53%"}
 **Isaac Chung**
 
 - 🏢 Staff Data Scientist, Wrike
-- 🏊‍♂️🚴🏃‍♂️ Fast triathloner
+- 🏊‍♂️🚴🏃‍♂️ Fast triathlete
 - 📍 🇭🇰 → 🇨🇦 → 🇪🇪
 - 🎓 MS Machine Learning
 
@@ -39,7 +39,7 @@ format:
 
 ## Link to notebooks
 
-TODO add QR code for repo
+![](media/dataframes-repo-qr-code.png)
 
 ## Getting setup
 
@@ -219,4 +219,6 @@ https://star-history.com/#apache/spark&pola-rs/polars&pandas-dev/pandas&narwhals
 
 ## Thank you!
 
-QR code for feedback?
+Scan this and let us know how we did 🤗
+
+![](media/pydata-meetup-feedback-logo.png)
