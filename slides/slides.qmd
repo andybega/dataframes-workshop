@@ -5,6 +5,8 @@ format:
     revealjs:
         theme: [default, styles.scss]
         embed-resources: true
+execute:
+  echo: true
 ---
 
 ## Bios
@@ -67,29 +69,31 @@ pandas data frame
 
 - 📖 ✍️ read and write
 - 🔬 inspect
-- 🔍 filter rows
 - 🛒 select columns
+- 🔍 filter rows
 
 :::
 
 ::: {.column width="50%"}
 
 - 🥪 mutate, add columns
-- 🤝 join other dataframes
 - 👨‍👩‍👧‍👦 group and aggregate
+- 🤝 join other dataframes
 - 🧱 reshape wide, long
 
 :::
 
 ::::
 
-# pandas
+# Section 1: pandas
 
 ![](media/pandas-logo.png)
 
 ## History
 
 Wes McKinney
+
+- 2008
 
 originally built on top of numpy
 pandas 2 () adds support for arrow backend
@@ -108,10 +112,109 @@ df = pd.DataFrame({
 })
 
 df.head()
-
 ```
 
-## Import accidents data
+## Components of a dataframe {.smaller}
+
+. . . 
+
+Series
+
+```{python}
+df.x
+```
+
+. . . 
+
+Columns
+
+```{python}
+df.columns
+```
+
+. . . 
+
+Index
+
+```{python}
+df.index
+```
+
+## Input - reading data from somehwere else {.smaller}
+
+```{python}
+accidents = pd.read_csv("../data/estonia-traffic-accidents-clean.csv")
+```
+
+## Inspecting {.smaller}
+
+. . . 
+
+```{python}
+accidents.shape
+```
+
+. . . 
+
+```{python}
+accidents.columns
+```
+
+. . . 
+
+```{python}
+#| eval: false
+accidents.head()
+```
+
+```{python}
+#| echo: false
+accidents[["date", "persons_involved", "killed", "injured", "county"]].head()
+```
+
+## Inspecting {.smaller}
+
+```{python}
+accidents.info()
+```
+
+
+
+## Selecting columns {.smaller}
+
+```{python}
+accidents["date"].head()
+```
+
+```{python}
+#| output: true
+accidents[["date", "county"]].head()
+```
+
+## Mutating columns {.smaller}
+
+```{python}
+#| output: asis
+accidents["date"] = pd.to_datetime(accidents["date"])
+accidents["date"].head()
+```
+
+## title {.smaller}
+
+```{python}
+```
+
+## title {.smaller}
+
+```{python}
+```
+
+
+
+
+
+
+
 
 
 ## pandas is great
@@ -137,11 +240,8 @@ df.head()
 [https://wesmckinney.com/blog/apache-arrow-pandas-internals/](https://wesmckinney.com/blog/apache-arrow-pandas-internals/)
 :::
 
-## Arrow
 
-2016 Apache Arrow as common in-memory data representation standard
-
-# polars
+# Section 2: polars
 
 ![](media/polars-logo.jpg)
 
@@ -151,7 +251,9 @@ df.head()
 
 2020 Ritchie Vink
 
-Uses arrow as internal representation
+Uses arrow as internal representation 
+
+(Created by Wes McKinney in 2016!)
 
 ## new slides
 
