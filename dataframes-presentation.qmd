@@ -4,7 +4,7 @@ author: "Andreas Beger and Isaac Chung <br/> PyData Tallinn x Python CodeClub <b
 format: 
     revealjs:
         theme: [default, styles.scss]
-        embed-resources: false
+        embed-resources: true
 execute:
   echo: true
 ---

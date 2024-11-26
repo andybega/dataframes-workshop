@@ -88,14 +88,14 @@
     "href": "dataframes-presentation.html#getting-started",
     "title": "Python dataframes with pandas and polars",
     "section": "Getting started",
-    "text": "Getting started\n\nimport numpy as np\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"quarter\": [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4],\n    \"x\": np.random.randn(12),\n    \"date\": pd.date_range(\"2024-01-01\", periods=12, freq=\"MS\")\n})\n\ndf.head()\n\n\n\n\n\n\n\n\nquarter\nx\ndate\n\n\n\n\n0\n1\n1.068246\n2024-01-01\n\n\n1\n1\n-0.660666\n2024-02-01\n\n\n2\n1\n-0.253664\n2024-03-01\n\n\n3\n2\n0.747306\n2024-04-01\n\n\n4\n2\n-0.132748\n2024-05-01"
+    "text": "Getting started\n\nimport numpy as np\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"quarter\": [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4],\n    \"x\": np.random.randn(12),\n    \"date\": pd.date_range(\"2024-01-01\", periods=12, freq=\"MS\")\n})\n\ndf.head()\n\n\n\n\n\n\n\n\nquarter\nx\ndate\n\n\n\n\n0\n1\n-0.002226\n2024-01-01\n\n\n1\n1\n-0.196338\n2024-02-01\n\n\n2\n1\n0.207700\n2024-03-01\n\n\n3\n2\n0.931805\n2024-04-01\n\n\n4\n2\n0.579740\n2024-05-01"
   },
   {
     "objectID": "dataframes-presentation.html#components-of-a-dataframe",
     "href": "dataframes-presentation.html#components-of-a-dataframe",
     "title": "Python dataframes with pandas and polars",
     "section": "Components of a dataframe",
-    "text": "Components of a dataframe\n\nSeries\n\ndf.x\n\n0     1.068246\n1    -0.660666\n2    -0.253664\n3     0.747306\n4    -0.132748\n5     1.312574\n6    -1.196567\n7     0.182457\n8     0.768476\n9     2.005653\n10   -0.087735\n11    0.301944\nName: x, dtype: float64\n\n\n\n\nColumns\n\ndf.columns\n\nIndex(['quarter', 'x', 'date'], dtype='object')\n\n\n\n\nIndex\n\ndf.index\n\nRangeIndex(start=0, stop=12, step=1)"
+    "text": "Components of a dataframe\n\nSeries\n\ndf.x\n\n0    -0.002226\n1    -0.196338\n2     0.207700\n3     0.931805\n4     0.579740\n5    -1.221461\n6    -0.834020\n7     0.905148\n8    -0.131270\n9     1.788473\n10   -0.793744\n11   -0.376970\nName: x, dtype: float64\n\n\n\n\nColumns\n\ndf.columns\n\nIndex(['quarter', 'x', 'date'], dtype='object')\n\n\n\n\nIndex\n\ndf.index\n\nRangeIndex(start=0, stop=12, step=1)"
   },
   {
     "objectID": "dataframes-presentation.html#input---reading-data",
