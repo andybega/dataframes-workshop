@@ -102,14 +102,14 @@
     "href": "dataframes-presentation.html#getting-started",
     "title": "Python dataframes with pandas and polars",
     "section": "Getting started",
-    "text": "Getting started\n\n\nimport numpy as np\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"quarter\": [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4],\n    \"x\": np.random.randn(12),\n    \"date\": pd.date_range(\"2024-01-01\", periods=12, freq=\"MS\")\n})\n\ndf.head()\n\n\n\n\n\n\n\n\nquarter\nx\ndate\n\n\n\n\n0\n1\n-1.140080\n2024-01-01\n\n\n1\n1\n-0.226769\n2024-02-01\n\n\n2\n1\n-1.964979\n2024-03-01\n\n\n3\n2\n-0.526330\n2024-04-01\n\n\n4\n2\n1.224439\n2024-05-01"
+    "text": "Getting started\n\n\nimport numpy as np\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"quarter\": [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4],\n    \"x\": np.random.randn(12),\n    \"date\": pd.date_range(\"2024-01-01\", periods=12, freq=\"MS\")\n})\n\ndf.head()\n\n\n\n\n\n\n\n\nquarter\nx\ndate\n\n\n\n\n0\n1\n0.915281\n2024-01-01\n\n\n1\n1\n-1.931241\n2024-02-01\n\n\n2\n1\n0.282123\n2024-03-01\n\n\n3\n2\n-0.050305\n2024-04-01\n\n\n4\n2\n0.728843\n2024-05-01"
   },
   {
     "objectID": "dataframes-presentation.html#components-of-a-dataframe",
     "href": "dataframes-presentation.html#components-of-a-dataframe",
     "title": "Python dataframes with pandas and polars",
     "section": "Components of a dataframe",
-    "text": "Components of a dataframe\n\nSeries\n\ndf.x\n\n0    -1.140080\n1    -0.226769\n2    -1.964979\n3    -0.526330\n4     1.224439\n5    -1.012823\n6     1.335487\n7     0.127692\n8    -0.643639\n9    -0.078051\n10   -2.482828\n11    0.662283\nName: x, dtype: float64\n\n\n\n\nColumns\n\ndf.columns\n\nIndex(['quarter', 'x', 'date'], dtype='object')\n\n\n\n\nIndex\n\ndf.index\n\nRangeIndex(start=0, stop=12, step=1)"
+    "text": "Components of a dataframe\n\nSeries\n\ndf.x\n\n0     0.915281\n1    -1.931241\n2     0.282123\n3    -0.050305\n4     0.728843\n5     1.414795\n6    -1.630921\n7    -1.216544\n8    -1.734879\n9    -0.274513\n10    1.025807\n11    2.450426\nName: x, dtype: float64\n\n\n\n\nColumns\n\ndf.columns\n\nIndex(['quarter', 'x', 'date'], dtype='object')\n\n\n\n\nIndex\n\ndf.index\n\nRangeIndex(start=0, stop=12, step=1)"
   },
   {
     "objectID": "dataframes-presentation.html#input---reading-data",
@@ -165,14 +165,14 @@
     "href": "dataframes-presentation.html#mutating-dataframes",
     "title": "Python dataframes with pandas and polars",
     "section": "Mutating dataframes",
-    "text": "Mutating dataframes\n\nHow many people were harmed in accidents in total?\n\n\n\naccidents[\"killed_or_injured\"] = accidents[\"killed\"] + accidents[\"injured\"]\naccidents[['killed', 'injured', 'killed_or_injured']].head()\n\n\n\n\n\n\n\n\nkilled\ninjured\nkilled_or_injured\n\n\n\n\n0\n0\n1\n1\n\n\n1\n0\n1\n1\n\n\n2\n0\n1\n1\n\n\n3\n0\n2\n2\n\n\n4\n0\n1\n1\n\n\n\n\n\n\n\n\n\n\n\naccidents[\"killed_or_injured\"].sum()\n\nnp.int64(18021)"
+    "text": "Mutating dataframes\n\n\naccidents[\"killed_or_injured\"] = accidents[\"killed\"] + accidents[\"injured\"]\naccidents[['killed', 'injured', 'killed_or_injured']].head()\n\n\n\n\n\n\n\n\nkilled\ninjured\nkilled_or_injured\n\n\n\n\n0\n0\n1\n1\n\n\n1\n0\n1\n1\n\n\n2\n0\n1\n1\n\n\n3\n0\n2\n2\n\n\n4\n0\n1\n1\n\n\n\n\n\n\n\n\n\n\n\naccidents[\"killed_or_injured\"].sum()\n\nnp.int64(18021)"
   },
   {
     "objectID": "dataframes-presentation.html#grouping-and-summarizing",
     "href": "dataframes-presentation.html#grouping-and-summarizing",
     "title": "Python dataframes with pandas and polars",
     "section": "Grouping and summarizing",
-    "text": "Grouping and summarizing\n\nHow many people were harmed, by accident type?\n\n\n\nby_type = accidents.groupby(\"accident_type\").agg({\"killed_or_injured\": \"sum\"})\n\n\n\n\nby_type\n\n\n\n\n\n\n\n\nkilled_or_injured\n\n\naccident_type\n\n\n\n\n\nJalakäijaõnnetus\n3548\n\n\nKokkupõrge\n7951\n\n\nMuu liiklusõnnetus\n1436\n\n\nTeadmata\n70\n\n\nÜhesõidukiõnnetus\n5016"
+    "text": "Grouping and summarizing\n\n\nby_type = accidents.groupby(\"accident_type\").agg({\"killed_or_injured\": \"sum\"})\n\n\n\n\nby_type\n\n\n\n\n\n\n\n\nkilled_or_injured\n\n\naccident_type\n\n\n\n\n\nJalakäijaõnnetus\n3548\n\n\nKokkupõrge\n7951\n\n\nMuu liiklusõnnetus\n1436\n\n\nTeadmata\n70\n\n\nÜhesõidukiõnnetus\n5016"
   },
   {
     "objectID": "dataframes-presentation.html#pandas-is-great",
@@ -228,7 +228,7 @@
     "href": "dataframes-presentation.html#they-can-be-composed",
     "title": "Python dataframes with pandas and polars",
     "section": "They can be composed",
-    "text": "They can be composed\nWhat the biggest accident, in terms of killed or injured?\n\n\naccidents.select(\n    # select 'killed'\n    pl.col(\"killed\")\n    # add 'injured'\n    .add(pl.col(\"injured\"))\n    # give the result a new column name\n    .alias(\"killed_or_injured\")\n    # identify the max value\n    .max())\n\n\nshape: (1, 1)\n\n\n\nkilled_or_injured\n\n\ni64\n\n\n\n\n23"
+    "text": "They can be composed\n\n\naccidents.select(\n    # select 'killed'\n    pl.col(\"killed\")\n    # add 'injured'\n    .add(pl.col(\"injured\"))\n    # give the result a new column name\n    .alias(\"killed_or_injured\")\n    # identify the max value\n    .max())\n\n\nshape: (1, 1)\n\n\n\nkilled_or_injured\n\n\ni64\n\n\n\n\n23"
   },
   {
     "objectID": "dataframes-presentation.html#and-they-work-in-multiple-contexts",
@@ -242,7 +242,7 @@
     "href": "dataframes-presentation.html#filtering-rows-1",
     "title": "Python dataframes with pandas and polars",
     "section": "Filtering rows",
-    "text": "Filtering rows\nHow many accidents were in Harju county?\n\naccidents.filter(pl.col(\"county\").eq(\"Harju maakond\")).shape\n\n(7000, 8)\n\n\n\n\naccidents.filter(pl.col(\"county\").str.contains(\"Harju\")).shape\n\n(7000, 8)"
+    "text": "Filtering rows\n\naccidents.filter(pl.col(\"county\").eq(\"Harju maakond\")).shape\n\n(7000, 8)\n\n\n\n\nLet’s be slightly lazy:\n\naccidents.filter(pl.col(\"county\").str.contains(\"Harju\")).shape\n\n(7000, 8)"
   },
   {
     "objectID": "dataframes-presentation.html#mutating-dataframes-1",
@@ -263,7 +263,7 @@
     "href": "dataframes-presentation.html#optional-joining-dataframes",
     "title": "Python dataframes with pandas and polars",
     "section": "(Optional) Joining dataframes",
-    "text": "(Optional) Joining dataframes\nWhat’s the per capita accident victim rate?\n\n\ncounty_pop = (pl.read_csv(\"data/county-pop.csv\", skip_rows=2)\n              .rename({\"County\": \"county\", \"Age groups total\": \"population\"})\n              .select([\"county\", \"population\"])\n              # this has \"county\" in the county names, not \"maakond\"\n              .with_columns(pl.col(\"county\").str.replace(\"county\", \"maakond\"))\n              )\n\nby_county_w_pop = by_county.join(county_pop, on=\"county\", how=\"left\")\nby_county_w_pop.head(3)\n\n\nshape: (3, 3)\n\n\n\ncounty\nkilled_or_injured\npopulation\n\n\nstr\ni64\ni64\n\n\n\n\n\"Harju maakond\"\n8423\n598059\n\n\n\"Tartu maakond\"\n1968\n152977\n\n\n\"Ida-Viru maakond\"\n1348\n136240"
+    "text": "(Optional) Joining dataframes\n\n\ncounty_pop = (pl.read_csv(\"data/county-pop.csv\", skip_rows=2)\n              .rename({\"County\": \"county\", \"Age groups total\": \"population\"})\n              .select([\"county\", \"population\"])\n              # this has \"county\" in the county names, not \"maakond\"\n              .with_columns(pl.col(\"county\").str.replace(\"county\", \"maakond\"))\n              )\n\nby_county_w_pop = by_county.join(county_pop, on=\"county\", how=\"left\")\nby_county_w_pop.head(3)\n\n\nshape: (3, 3)\n\n\n\ncounty\nkilled_or_injured\npopulation\n\n\nstr\ni64\ni64\n\n\n\n\n\"Harju maakond\"\n8423\n598059\n\n\n\"Tartu maakond\"\n1968\n152977\n\n\n\"Ida-Viru maakond\"\n1348\n136240"
   },
   {
     "objectID": "dataframes-presentation.html#optional-joining-dataframes-1",
@@ -277,7 +277,7 @@
     "href": "dataframes-presentation.html#optional-reshaping-pivoting-dataframes",
     "title": "Python dataframes with pandas and polars",
     "section": "(Optional) Reshaping / pivoting dataframes",
-    "text": "(Optional) Reshaping / pivoting dataframes\nWe’re going to use a different dataset on reflector usage for this.\n\n\nreflectors = (pl.read_csv(\"data/reflectors.csv\", has_header=True, separator=\";\", skip_rows=2)\n              .filter(pl.col(\"Sex\").ne(\"Men and women\"))\n              .drop([\"Type of data\", \"Year\", \"All age groups (16-64)\"])\n)\nreflectors.head()\n\n\nshape: (5, 7)\n\n\n\nReflector use\nSex\n16-24\n25-34\n35-44\n45-54\n55-64\n\n\nstr\nstr\nf64\nf64\nf64\nf64\nf64\n\n\n\n\n\"Never\"\n\"Men\"\n14.3\n12.4\n7.2\n3.9\n2.7\n\n\n\"Never\"\n\"Women\"\n8.8\n5.0\n4.6\n2.0\n2.5\n\n\n\"Sometimes\"\n\"Men\"\n46.7\n36.2\n30.9\n26.1\n28.7\n\n\n\"Sometimes\"\n\"Women\"\n29.6\n26.0\n20.6\n14.8\n13.7\n\n\n\"Nearly always\"\n\"Men\"\n34.3\n40.5\n52.2\n58.6\n55.9"
+    "text": "(Optional) Reshaping / pivoting dataframes\n\nreflectors = (reflectors\n              .unpivot(index=[\"Reflector use\", \"Sex\"], \n                       variable_name=\"age_group\", \n                       value_name=\"percentage\")\n)\nreflectors.head()\n\n\nshape: (5, 4)\n\n\n\nReflector use\nSex\nage_group\npercentage\n\n\nstr\nstr\nstr\nf64\n\n\n\n\n\"Never\"\n\"Men\"\n\"16-24\"\n14.3\n\n\n\"Never\"\n\"Women\"\n\"16-24\"\n8.8\n\n\n\"Sometimes\"\n\"Men\"\n\"16-24\"\n46.7\n\n\n\"Sometimes\"\n\"Women\"\n\"16-24\"\n29.6\n\n\n\"Nearly always\"\n\"Men\"\n\"16-24\"\n34.3"
   },
   {
     "objectID": "dataframes-presentation.html#optional-reshaping-pivoting-dataframes-1",
@@ -389,6 +389,48 @@
     "href": "dataframes-presentation.html#polars-is-different-from-pandas",
     "title": "Python dataframes with pandas and polars",
     "section": "polars is different from pandas",
-    "text": "polars is different from pandas\n\n\nUse methods, not []; no index\nCompose methods (methods chaining)\nExpressions\n\n\n\nimport pyarrow\n\ndf = pl.DataFrame({\"x\": [1, 2, 3], \"y\": [4, 5, 6]})\n# to make this a pandas dataframe\n# (requires pyarrow)\ndf_pd = df.to_pandas()\n# to convert it back to polars dataframe\ndf_pl = pl.DataFrame(df_pd)"
+    "text": "polars is different from pandas\n\n\nUse methods, not []; no index\nCompose methods (methods chaining)\nExpressions\n\n\n\nWe can always convert back and forth:\nimport pyarrow\n\ndf = pl.DataFrame({\"x\": [1, 2, 3], \"y\": [4, 5, 6]})\n# to make this a pandas dataframe\n# (requires pyarrow)\ndf_pd = df.to_pandas()\n# to convert it back to polars dataframe\ndf_pl = pl.DataFrame(df_pd)"
+  },
+  {
+    "objectID": "dataframes-presentation.html#pandas-series",
+    "href": "dataframes-presentation.html#pandas-series",
+    "title": "Python dataframes with pandas and polars",
+    "section": "Pandas Series",
+    "text": "Pandas Series\n\ndates = accidents[\"date\"]\ntype(dates)\n\npandas.core.series.Series\n\n\n\n\n\nstart = accidents[\"date\"].min()\nend = accidents[\"date\"].max()\nprint(f\"First accident: {start}\\nLast accident: {end}\")\n\nFirst accident: 2011-01-05 00:00:00\nLast accident: 2021-12-31 23:45:00\n\n\n\n\n\n\naccidents[\"accident_type\"].value_counts()\n\naccident_type\nKokkupõrge            5605\nÜhesõidukiõnnetus     3946\nJalakäijaõnnetus      3386\nMuu liiklusõnnetus    1262\nTeadmata                60\nName: count, dtype: int64"
+  },
+  {
+    "objectID": "dataframes-presentation.html#expressions-work-in-multiple-contexts",
+    "href": "dataframes-presentation.html#expressions-work-in-multiple-contexts",
+    "title": "Python dataframes with pandas and polars",
+    "section": "Expressions work in multiple contexts",
+    "text": "Expressions work in multiple contexts\n\nselect()\nfilter()\nwith_columns(): mutating dataframes\ngroup_by() and aggregations"
+  },
+  {
+    "objectID": "dataframes-presentation.html#reshaping-pivoting-dataframes",
+    "href": "dataframes-presentation.html#reshaping-pivoting-dataframes",
+    "title": "Python dataframes with pandas and polars",
+    "section": "Reshaping / pivoting dataframes",
+    "text": "Reshaping / pivoting dataframes\n\n\nreflectors = (pl.read_csv(\"data/reflectors.csv\", has_header=True, separator=\";\", skip_rows=2)\n              .filter(pl.col(\"Sex\").ne(\"Men and women\"))\n              .drop([\"Type of data\", \"Year\", \"All age groups (16-64)\"])\n)\nreflectors.head()\n\n\nshape: (5, 7)\n\n\n\nReflector use\nSex\n16-24\n25-34\n35-44\n45-54\n55-64\n\n\nstr\nstr\nf64\nf64\nf64\nf64\nf64\n\n\n\n\n\"Never\"\n\"Men\"\n14.3\n12.4\n7.2\n3.9\n2.7\n\n\n\"Never\"\n\"Women\"\n8.8\n5.0\n4.6\n2.0\n2.5\n\n\n\"Sometimes\"\n\"Men\"\n46.7\n36.2\n30.9\n26.1\n28.7\n\n\n\"Sometimes\"\n\"Women\"\n29.6\n26.0\n20.6\n14.8\n13.7\n\n\n\"Nearly always\"\n\"Men\"\n34.3\n40.5\n52.2\n58.6\n55.9"
+  },
+  {
+    "objectID": "dataframes-presentation.html#joining-dataframes",
+    "href": "dataframes-presentation.html#joining-dataframes",
+    "title": "Python dataframes with pandas and polars",
+    "section": "Joining dataframes",
+    "text": "Joining dataframes\n\n\ncounty_pop = (pl.read_csv(\"data/county-pop.csv\", skip_rows=2)\n              .rename({\"County\": \"county\", \"Age groups total\": \"population\"})\n              .select([\"county\", \"population\"])\n              # this has \"county\" in the county names, not \"maakond\"\n              .with_columns(pl.col(\"county\").str.replace(\"county\", \"maakond\"))\n              )\n\nby_county_w_pop = by_county.join(county_pop, on=\"county\", how=\"left\")\nby_county_w_pop.head(3)\n\n\nshape: (3, 3)\n\n\n\ncounty\nkilled_or_injured\npopulation\n\n\nstr\ni64\ni64\n\n\n\n\n\"Harju maakond\"\n8423\n598059\n\n\n\"Tartu maakond\"\n1968\n152977\n\n\n\"Ida-Viru maakond\"\n1348\n136240"
+  },
+  {
+    "objectID": "dataframes-presentation.html#joining-dataframes-1",
+    "href": "dataframes-presentation.html#joining-dataframes-1",
+    "title": "Python dataframes with pandas and polars",
+    "section": "Joining dataframes",
+    "text": "Joining dataframes\nNow we can use some simple select + expressions do to the math:\n\n\nby_county_w_pop.select(\n    pl.col(\"county\"), \n    pl.col(\"killed_or_injured\"),\n    pl.col(\"killed_or_injured\").truediv(pl.col(\"population\")).mul(1000).alias(\"rate/1000\")\n    ).head(3)\n\n\nshape: (3, 3)\n\n\n\ncounty\nkilled_or_injured\nrate/1000\n\n\nstr\ni64\nf64\n\n\n\n\n\"Harju maakond\"\n8423\n14.083895\n\n\n\"Tartu maakond\"\n1968\n12.864679\n\n\n\"Ida-Viru maakond\"\n1348\n9.894304"
+  },
+  {
+    "objectID": "dataframes-presentation.html#reshaping-pivoting-dataframes-1",
+    "href": "dataframes-presentation.html#reshaping-pivoting-dataframes-1",
+    "title": "Python dataframes with pandas and polars",
+    "section": "Reshaping / pivoting dataframes",
+    "text": "Reshaping / pivoting dataframes\n\nreflectors = (reflectors\n              .unpivot(index=[\"Reflector use\", \"Sex\"], \n                       variable_name=\"age_group\", \n                       value_name=\"percentage\")\n)\nreflectors.head()\n\n\nshape: (5, 4)\n\n\n\nReflector use\nSex\nage_group\npercentage\n\n\nstr\nstr\nstr\nf64\n\n\n\n\n\"Never\"\n\"Men\"\n\"16-24\"\n14.3\n\n\n\"Never\"\n\"Women\"\n\"16-24\"\n8.8\n\n\n\"Sometimes\"\n\"Men\"\n\"16-24\"\n46.7\n\n\n\"Sometimes\"\n\"Women\"\n\"16-24\"\n29.6\n\n\n\"Nearly always\"\n\"Men\"\n\"16-24\"\n34.3"
   }
 ]

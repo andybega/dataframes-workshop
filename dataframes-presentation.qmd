@@ -164,31 +164,6 @@ by_columns = {
 
 :::
 
-## Common dataframe operations
-
-:::: {.columns .v-center-container}
-
-::: {.column width="50%" .incremental}
-
-- 📖 ✍️ read and write
-- 🔬 inspect
-- 🛒 select columns
-- 🔍 filter rows
-
-:::
-
-::: {.column width="50%" .incremental}
-
-- 🥪 mutate, add columns
-- 👨‍👩‍👧‍👦 group and aggregate
-- 🤝 join other dataframes
-- 🧱 reshape wide, long
-
-:::
-
-::::
-
-
 # Section 1: pandas
 
 ![](media/pandas-logo.png)
@@ -257,6 +232,14 @@ Index
 df.index
 ```
 
+# Let's look at some real data
+
+Estonian vehicle accident data
+
+- 📖 ✍️ read and write
+- 🔬 inspect
+
+
 ## Input - reading data {.smaller}
 
 . . . 
@@ -297,7 +280,10 @@ accidents[["date", "persons_involved", "killed", "injured", "county"]].head()
 accidents.info()
 ```
 
+# What time period does the data cover?
 
+- 🛒 select columns
+- 🥪 mutate, add columns
 
 ## Selecting columns {.smaller}
 
@@ -343,7 +329,7 @@ accidents["date"] = pd.to_datetime(accidents["date"])
 type(accidents["date"][0])
 ```
 
-## Sidebar: Pandas Series {.smaller}
+## Pandas Series {.smaller}
 
 ```{python}
 dates = accidents["date"]
@@ -370,7 +356,9 @@ accidents["accident_type"].value_counts()
 
 . . . 
 
-What if we want to know how many accidents were in Harju county?
+# What if we want to know how many accidents were in Harju county?
+
+- 🔍 filter rows
 
 ## Filtering rows {.smaller}
 
@@ -386,12 +374,11 @@ accidents[accidents["county"] == "Harju maakond"].shape
 accidents["county"] == "Harju maakond"
 ```
 
+# How many people were harmed in total?
+
+- 🥪 mutate, add columns
 
 ## Mutating dataframes {.smaller}
-
-. . . 
-
-How many people were harmed in accidents in total?
 
 . . . 
 
@@ -408,12 +395,11 @@ accidents[['killed', 'injured', 'killed_or_injured']].head()
 accidents["killed_or_injured"].sum()
 ```
 
+# What about by accident type?
+
+- 👨‍👩‍👧‍👦 group and aggregate
 
 ## Grouping and summarizing {.smaller}
-
-. . . 
-
-How many people were harmed, by accident type?
 
 . . . 
 
@@ -519,6 +505,8 @@ accidents.select(accidents.columns[0:5]).head()
 
 ::: {.fragment}
 
+We can always convert back and forth:
+
 ```python
 import pyarrow
 
@@ -531,6 +519,14 @@ df_pl = pl.DataFrame(df_pd)
 ```
 
 :::
+
+# What the biggest accident, in terms of killed or injured?
+
+- 🛒 select columns
+- 🥪 mutate, add columns
+- 🔍 filter rows
+
+**Expressions**!
 
 ## Selecting columns {.smaller}
 
@@ -548,8 +544,6 @@ accidents.select(pl.col("date")).head()
 
 ## They can be composed {.smaller}
 
-What the biggest accident, in terms of killed or injured?
-
 . . . 
 
 ```{python}
@@ -565,16 +559,18 @@ accidents.select(
 ```
 
 
-## And they work in multiple contexts
+## Expressions work in multiple contexts
 
 - `select()`
 - `filter()`
 - `with_columns()`: mutating dataframes
 - `group_by()` and aggregations
 
-## Filtering rows 
+# How many accidents were in Harju county?
 
-How many accidents were in Harju county?
+- 🔍 filter rows
+
+## Filtering rows 
 
 ```{python}
 accidents.filter(pl.col("county").eq("Harju maakond")).shape
@@ -582,9 +578,17 @@ accidents.filter(pl.col("county").eq("Harju maakond")).shape
 
 . . . 
 
+<br/>
+
+Let's be slightly lazy:
+
 ```{python}
 accidents.filter(pl.col("county").str.contains("Harju")).shape
 ```
+
+# What fraction of people involved in an accident were harmed?
+
+- 🥪 mutate, add columns
 
 ## Mutating dataframes {.smaller}
 
@@ -599,6 +603,10 @@ accidents = accidents.with_columns(
 )
 accidents.select(["date", "persons_involved", "killed_or_injured", "harmed_rate"]).head(5)
 ```
+
+# Which county had the most accidents?
+
+- 👨‍👩‍👧‍👦 group and aggregate
 
 ## Group and summarize/aggregate {.smaller}
 
@@ -615,9 +623,11 @@ by_county = (accidents
 by_county.head()
 ```
 
-## (Optional) Joining dataframes {.smaller}
+# What's the per capita accident victim rate, by county?
 
-What's the per capita accident victim rate?
+(Optional)
+
+## Joining dataframes {.smaller}
 
 . . . 
 
@@ -633,7 +643,7 @@ by_county_w_pop = by_county.join(county_pop, on="county", how="left")
 by_county_w_pop.head(3)
 ```
 
-## (Optional) Joining dataframes {.smaller}
+## Joining dataframes {.smaller}
 
 Now we can use some simple select + expressions do to the math:
 
@@ -647,9 +657,14 @@ by_county_w_pop.select(
     ).head(3)
 ```
 
-## (Optional) Reshaping / pivoting dataframes {.smaller}
+# Who is warning reflectors? Men or women? Young or old?
 
-We're going to use a different dataset on reflector usage for this.
+We will use new data for this. 
+
+- 🧱 reshape wide, long
+
+
+## Reshaping / pivoting dataframes {.smaller}
 
 . . . 
 
@@ -661,7 +676,7 @@ reflectors = (pl.read_csv("data/reflectors.csv", has_header=True, separator=";",
 reflectors.head()
 ```
 
-## (Optional) Reshaping / pivoting dataframes {.smaller}
+## Reshaping / pivoting dataframes {.smaller}
 
 ```{python}
 reflectors = (reflectors
