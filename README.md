@@ -9,7 +9,9 @@ Nov 27, 2024 | [PyData Meetup #3](https://www.meetup.com/pydata-tallinn/events/3
 git clone https://github.com/andybega/dataframes-workshop.git
 ```
 
-2. Create a Conda env with dependencies
+2. Setup dev environment
+- a. Use the dev container via your IDE, or
+- b. Create a Conda env with dependencies
 ```
 conda env create --file=environment.yml
 ```
