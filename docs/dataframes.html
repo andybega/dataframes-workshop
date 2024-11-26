@@ -1,0 +1,2774 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Section 1: pandas</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Section 1: pandas</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>We will start with <strong>pandas</strong>, the original and most widely used dataframe and data analysis library in Python.</p>
+<div>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Pandas_logo.svg/640px-Pandas_logo.svg.png" width="600"></p>
+</div>
+<section id="getting-started" class="level3">
+<h3 class="anchored" data-anchor-id="getting-started">Getting Started</h3>
+<p>We first need to import pandas. We’ll also import another package, numpy, which implements data types for vectors and matrices. Pandas is built on top of numpy, but we only import it here to make it easier to generate an example data frame.</p>
+<div id="cell-3" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an example data frame</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"quarter"</span>: [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>],</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"x"</span>: np.random.randn(<span class="dv">5</span>),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>: pd.date_range(<span class="st">"2024-01-01"</span>, periods<span class="op">=</span><span class="dv">5</span>, freq<span class="op">=</span><span class="st">"MS"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">quarter</th>
+<th data-quarto-table-cell-role="th">x</th>
+<th data-quarto-table-cell-role="th">date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>0.592588</td>
+<td>2024-01-01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>0.299506</td>
+<td>2024-02-01</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2</td>
+<td>-0.912598</td>
+<td>2024-03-01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2</td>
+<td>-1.678367</td>
+<td>2024-04-01</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>3</td>
+<td>0.801012</td>
+<td>2024-05-01</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="components-of-a-dataframe" class="level3">
+<h3 class="anchored" data-anchor-id="components-of-a-dataframe">Components of a dataframe</h3>
+<p>Pandas <strong>DataFrame</strong>s consist of three components:</p>
+<ol type="1">
+<li>One or more <strong>Series</strong>, which are the columns in the <strong>DataFrame</strong>.</li>
+<li>The names for the series, i.e.&nbsp;column names of the dataframe.</li>
+<li>The row names for each row in the dataframe, which pandas calls the <strong>Index</strong>.</li>
+</ol>
+<section id="series" class="level4">
+<h4 class="anchored" data-anchor-id="series">Series</h4>
+<div id="cell-6" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df.x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>0    0.592588
+1    0.299506
+2   -0.912598
+3   -1.678367
+4    0.801012
+Name: x, dtype: float64</code></pre>
+</div>
+</div>
+<p>(Note how each series can have a different data type, unlike in a matrix or an array.)</p>
+</section>
+<section id="columns" class="level4">
+<h4 class="anchored" data-anchor-id="columns">Columns</h4>
+<div id="cell-9" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>Index(['quarter', 'x', 'date'], dtype='object')</code></pre>
+</div>
+</div>
+</section>
+<section id="index" class="level4">
+<h4 class="anchored" data-anchor-id="index">Index</h4>
+<div id="cell-11" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df.index</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>RangeIndex(start=0, stop=5, step=1)</code></pre>
+</div>
+</div>
+<p>Since we didn’t explicitly set an index when we created the dataframe, it’s just a sequence of numbers starting at 0. Indexes are actually a key concept in pandas and we’ll talk a little bit more about them later.</p>
+</section>
+</section>
+<section id="input-reading-data-from-elsewhere" class="level3">
+<h3 class="anchored" data-anchor-id="input-reading-data-from-elsewhere">Input: reading data from elsewhere</h3>
+<p>Pandas can import dataframes from a variety of external sources like text files, JSON, Excel spreadsheets, APIs, and SQL databases. See the <a href="https://pandas.pydata.org/docs/reference/io.html">input/output documentation</a> for more information.</p>
+<p>We’re going to read data on Estonian vehicle accidents from a comma-separated variable (CSV) file, one of the most common text file types for storing data.</p>
+<div id="cell-14" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>accidents <span class="op">=</span> pd.read_csv(<span class="st">"data/estonia-traffic-accidents-clean.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="inspecting" class="level3">
+<h3 class="anchored" data-anchor-id="inspecting">Inspecting</h3>
+<p>One of the first things we might want to do with a new dataset is to get our bearings on some basic characteristics of the data.</p>
+<section id="how-many-rows-and-columns-are-there" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-rows-and-columns-are-there">How many rows and columns are there?</h4>
+<div id="cell-17" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>accidents.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>(14259, 8)</code></pre>
+</div>
+</div>
+</section>
+<section id="what-are-the-column-names" class="level4">
+<h4 class="anchored" data-anchor-id="what-are-the-column-names">What are the column names?</h4>
+<div id="cell-19" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>accidents.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>Index(['date', 'persons_involved', 'killed', 'injured', 'county',
+       'pedestrian_involved', 'accident_type', 'light_conditions'],
+      dtype='object')</code></pre>
+</div>
+</div>
+</section>
+<section id="what-does-the-data-look-like" class="level4">
+<h4 class="anchored" data-anchor-id="what-does-the-data-look-like">What does the data look like?</h4>
+<div id="cell-21" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>accidents.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">persons_involved</th>
+<th data-quarto-table-cell-role="th">killed</th>
+<th data-quarto-table-cell-role="th">injured</th>
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">pedestrian_involved</th>
+<th data-quarto-table-cell-role="th">accident_type</th>
+<th data-quarto-table-cell-role="th">light_conditions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2014-10-24 08:45:00</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>Harju maakond</td>
+<td>1</td>
+<td>Jalakäijaõnnetus</td>
+<td>Valge aeg</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2014-10-24 13:45:00</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>Harju maakond</td>
+<td>0</td>
+<td>Kokkupõrge</td>
+<td>Valge aeg</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2014-08-11 00:00:00</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>Harju maakond</td>
+<td>0</td>
+<td>Kokkupõrge</td>
+<td>Valge aeg</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2014-11-17 17:32:00</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>Harju maakond</td>
+<td>0</td>
+<td>Kokkupõrge</td>
+<td>Pimeda aeg</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2015-04-28 07:55:00</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>Harju maakond</td>
+<td>0</td>
+<td>Kokkupõrge</td>
+<td>Valge aeg</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="do-we-have-missing-data-what-are-the-data-types" class="level4">
+<h4 class="anchored" data-anchor-id="do-we-have-missing-data-what-are-the-data-types">Do we have missing data? What are the data types?</h4>
+<div id="cell-23" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>accidents.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 14259 entries, 0 to 14258
+Data columns (total 8 columns):
+ #   Column               Non-Null Count  Dtype 
+---  ------               --------------  ----- 
+ 0   date                 14259 non-null  object
+ 1   persons_involved     14259 non-null  int64 
+ 2   killed               14259 non-null  int64 
+ 3   injured              14259 non-null  int64 
+ 4   county               14259 non-null  object
+ 5   pedestrian_involved  14259 non-null  int64 
+ 6   accident_type        14259 non-null  object
+ 7   light_conditions     14259 non-null  object
+dtypes: int64(4), object(4)
+memory usage: 891.3+ KB</code></pre>
+</div>
+</div>
+<p>We could also have used <code>accidents.dtypes</code> to get the data types.</p>
+<p>Note that, if you look back at the number of rows we looked up before, you’ll notice that none of the columns have missing values, and that all but one of the data types look correct. This is because this is an already cleaned up version of the data. Below in this notebook you can also see what we did to clean up the data.</p>
+</section>
+</section>
+<section id="selecting-columns" class="level3">
+<h3 class="anchored" data-anchor-id="selecting-columns">Selecting columns</h3>
+<p>There are various ways to do this, including the <code>&lt;dataframe&gt;.&lt;column&gt;</code> notation we used above. One alternative is the square bracket <code>&lt;dataframe&gt;.[]</code>:</p>
+<div id="cell-26" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>accidents[<span class="st">"date"</span>].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>0    2014-10-24 08:45:00
+1    2014-10-24 13:45:00
+2    2014-08-11 00:00:00
+3    2014-11-17 17:32:00
+4    2015-04-28 07:55:00
+Name: date, dtype: object</code></pre>
+</div>
+</div>
+<p>To select multiple columns we can use a list with the column names as the argument:</p>
+<div id="cell-28" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>accidents[[<span class="st">"date"</span>, <span class="st">"county"</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">county</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2014-10-24 08:45:00</td>
+<td>Harju maakond</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2014-10-24 13:45:00</td>
+<td>Harju maakond</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2014-08-11 00:00:00</td>
+<td>Harju maakond</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2014-11-17 17:32:00</td>
+<td>Harju maakond</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2015-04-28 07:55:00</td>
+<td>Harju maakond</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="mutating-columns" class="level3">
+<h3 class="anchored" data-anchor-id="mutating-columns">Mutating columns</h3>
+<p>The dateas are currently stored as strings (<code>object</code>). We should fix that.</p>
+<p>(pandas uses the <code>object</code> data types by default for strings, even though this can store arbitrary Python objects. This is for historical reasons related to originally being built on top of numpy. <a href="https://pandas.pydata.org/docs/user_guide/text.html">More on pandas text data types.</a>)</p>
+<div id="cell-30" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>accidents[<span class="st">"date"</span>][<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>'2014-10-24 08:45:00'</code></pre>
+</div>
+</div>
+<div id="cell-31" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(accidents[<span class="st">"date"</span>][<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>str</code></pre>
+</div>
+</div>
+<div id="cell-32" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>accidents[<span class="st">"date"</span>] <span class="op">=</span> pd.to_datetime(accidents[<span class="st">"date"</span>])</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>accidents[<span class="st">"date"</span>][<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>Timestamp('2014-10-24 08:45:00')</code></pre>
+</div>
+</div>
+</section>
+<section id="sidebar-pandas-series" class="level3">
+<h3 class="anchored" data-anchor-id="sidebar-pandas-series">Sidebar: Pandas Series</h3>
+<p>Let’s spend a hot second looking at an individual series.</p>
+<div id="cell-34" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>dates <span class="op">=</span> accidents[<span class="st">"date"</span>]</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(dates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>pandas.core.series.Series</code></pre>
+</div>
+</div>
+<section id="what-date-range-does-the-data-cover" class="level4">
+<h4 class="anchored" data-anchor-id="what-date-range-does-the-data-cover">What date range does the data cover?</h4>
+<p>Series have their own methods…</p>
+<div id="cell-36" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> accidents[<span class="st">"date"</span>].<span class="bu">min</span>()</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> accidents[<span class="st">"date"</span>].<span class="bu">max</span>()</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"First accident: </span><span class="sc">{</span>start<span class="sc">}</span><span class="ch">\n</span><span class="ss">Last accident: </span><span class="sc">{</span>end<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>First accident: 2011-01-05 00:00:00
+Last accident: 2021-12-31 23:45:00</code></pre>
+</div>
+</div>
+</section>
+<section id="what-types-of-accidents-were-there" class="level4">
+<h4 class="anchored" data-anchor-id="what-types-of-accidents-were-there">What types of accidents were there?</h4>
+<p>The <code>Series.value_counts()</code> method is a quite useful method for tabulating categorical variables:</p>
+<div id="cell-38" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>accidents[<span class="st">"accident_type"</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>accident_type
+Kokkupõrge            5605
+Ühesõidukiõnnetus     3946
+Jalakäijaõnnetus      3386
+Muu liiklusõnnetus    1262
+Teadmata                60
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="filter-rows" class="level4">
+<h4 class="anchored" data-anchor-id="filter-rows">Filter rows</h4>
+<p>Oftentimes we don’t need all rows in a dataframe to answer a specific question. This is commonly called filtering or subsetting rows.</p>
+</section>
+<section id="how-many-of-the-accidents-were-in-harju-county" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-of-the-accidents-were-in-harju-county">How many of the accidents were in Harju county?</h4>
+<p>We have a “county” column, so we can use that to look at only Harju county. As with selecting columns, there are multiple ways to do this in pandas. One of the basic ones is to again use the <code>&lt;dataframe&gt;.[]</code> square brackets.</p>
+<div id="cell-41" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>accidents[accidents[<span class="st">"county"</span>] <span class="op">==</span> <span class="st">"Harju maakond"</span>].shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>(7000, 8)</code></pre>
+</div>
+</div>
+<p>Another sidebar – Why does this work? The part inside the outer square brackets creates a boolean vector:</p>
+<div id="cell-43" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>accidents[<span class="st">"county"</span>] <span class="op">==</span> <span class="st">"Harju maakond"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>0         True
+1         True
+2         True
+3         True
+4         True
+         ...  
+14254    False
+14255    False
+14256     True
+14257    False
+14258    False
+Name: county, Length: 14259, dtype: bool</code></pre>
+</div>
+</div>
+<p>When we pass this boolean vector to the square brackets, it uses it to filter rows. Rather than select columns, like it did with `accidents[“county”].</p>
+<p>Yeah, it’s weird and inconsistent, which is one of the things people complain about with pandas.</p>
+<p>What’s more, there are many more ways to select and filter. See the <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html">“Indexing and selecting data”</a> documentation for all the various methods pandas has, both for column selecting and row filtering.</p>
+</section>
+</section>
+<section id="mutate-add-a-new-column" class="level3">
+<h3 class="anchored" data-anchor-id="mutate-add-a-new-column">Mutate: add a new column</h3>
+<p>We’ve covered how to alter an existing column. We can actually use the same method to add a new column.</p>
+<section id="how-many-people-were-killed-or-injured-overall" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-people-were-killed-or-injured-overall">How many people were killed or injured, overall?</h4>
+<div id="cell-47" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>accidents[<span class="st">"killed_or_injured"</span>] <span class="op">=</span> accidents[<span class="st">"killed"</span>] <span class="op">+</span> accidents[<span class="st">"injured"</span>]</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>accidents[[<span class="st">'killed'</span>, <span class="st">'injured'</span>, <span class="st">'killed_or_injured'</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">killed</th>
+<th data-quarto-table-cell-role="th">injured</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-48" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>accidents[<span class="st">"killed_or_injured"</span>].<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>np.int64(18021)</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="group-and-summarize" class="level3">
+<h3 class="anchored" data-anchor-id="group-and-summarize">Group and summarize</h3>
+<p>Oftentimes we want to summarize our data over some group that is defined by one of the variables. To do this we usually want to use a combination of <code>groupby</code> and <code>agg</code>.</p>
+<section id="how-many-people-were-harmed-by-accident-type" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-people-were-harmed-by-accident-type">How many people were harmed, by accident type?</h4>
+<div id="cell-51" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summarize total accidents by something</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>by_type <span class="op">=</span> accidents.groupby(<span class="st">"accident_type"</span>).agg({<span class="st">"killed_or_injured"</span>: <span class="st">"sum"</span>})</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>by_type</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">accident_type</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Jalakäijaõnnetus</td>
+<td>3548</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kokkupõrge</td>
+<td>7951</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Muu liiklusõnnetus</td>
+<td>1436</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Teadmata</td>
+<td>70</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Ühesõidukiõnnetus</td>
+<td>5016</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="optional-more-on-indexes" class="level3">
+<h3 class="anchored" data-anchor-id="optional-more-on-indexes">(Optional) More on Indexes</h3>
+<p>In the table above, you might noticed that the “accident_type” is now for some reason shown differently from the “killed_or_injured” variable. Indeed, if we check the columns, it’s not there anymore:</p>
+<div id="cell-53" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>by_type.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>Index(['killed_or_injured'], dtype='object')</code></pre>
+</div>
+</div>
+<p>What happened is that when we did the group by and agg, pandas moved “accident_type” to the Index.</p>
+<div id="cell-55" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>by_type.index</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>Index(['Jalakäijaõnnetus', 'Kokkupõrge', 'Muu liiklusõnnetus', 'Teadmata',
+       'Ühesõidukiõnnetus'],
+      dtype='object', name='accident_type')</code></pre>
+</div>
+</div>
+<p>Since we hadn’t set an index when we imported the data from CSV, this previously was just an integer count from 0, which you can see above when we showed the first few rows of the data with <code>head()</code>. Now it’s “accident_type”.</p>
+<p>pandas extensively uses indexes for various operations. There are event <a href="https://pandas.pydata.org/docs/user_guide/advanced.html">hierarchical MultiIndexes</a> that consist of more than one variable.</p>
+<p>There are really only two important things to know about pandas Indexes.</p>
+<p>First, there are two kinds of pandas users:</p>
+<ol type="1">
+<li>Those that love indexes and use them extensively. Such index powerusers are rumored to exist, at least they say.</li>
+<li>People like me who don’t use them unless forced to.</li>
+</ol>
+<p>Second, indexes are like variables, but moved to the row labels. You can move them back and forth with two functions:</p>
+<ul>
+<li><code>set_index(&lt;keys&gt;)</code>: move columns to the index; <keys> can be a column name or list of names.</keys></li>
+<li><code>reset_index()</code>: move the variables in the current index back to the dataframe as columns.</li>
+</ul>
+<section id="how-many-people-were-harmed-by-year" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-people-were-harmed-by-year">How many people were harmed, by year?</h4>
+<p>To further explore this, let’s look at the number of people harmed, by year.</p>
+<div id="cell-58" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>by_year <span class="op">=</span> (accidents</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>           .loc[:, [<span class="st">"date"</span>, <span class="st">"killed_or_injured"</span>, <span class="st">"persons_involved"</span>]]</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>           .resample(rule<span class="op">=</span><span class="st">"YE"</span>, on<span class="op">=</span><span class="st">"date"</span>)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>           .<span class="bu">sum</span>()</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>by_year.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+<th data-quarto-table-cell-role="th">persons_involved</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2011-12-31</td>
+<td>533</td>
+<td>722</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2012-12-31</td>
+<td>1713</td>
+<td>2289</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2013-12-31</td>
+<td>1714</td>
+<td>2271</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2014-12-31</td>
+<td>1758</td>
+<td>2429</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2015-12-31</td>
+<td>1773</td>
+<td>2859</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>This uses a bit more complicated code we won’t explain in more detail. <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html"><code>.loc[]</code></a> is on the of the alternative select/filter methods. <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.resample.html"><code>resample()</code></a> is like <code>groupby()</code> but for time series. Because the code is quite long for one line, we do something called method chaining, where we put each new method call on a new line. This requires wrapping the whole statement in parentheses.</p>
+<p>The date column has been moved to the index. Since we’ve aggregated the data to yearly, it would be nice, e.g.&nbsp;for plotting, if we just had the years in a column, not the misleading full date times.</p>
+<div id="cell-61" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Move date back to a column; note how we get a new dummy 0,1,... index</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>by_year <span class="op">=</span> by_year.reset_index()</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>by_year.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+<th data-quarto-table-cell-role="th">persons_involved</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2011-12-31</td>
+<td>533</td>
+<td>722</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2012-12-31</td>
+<td>1713</td>
+<td>2289</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2013-12-31</td>
+<td>1714</td>
+<td>2271</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2014-12-31</td>
+<td>1758</td>
+<td>2429</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2015-12-31</td>
+<td>1773</td>
+<td>2859</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-62" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To extract the year from the date we can use this:</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>by_year[<span class="st">"date"</span>].dt.year.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>0    2011
+1    2012
+2    2013
+3    2014
+4    2015
+Name: date, dtype: int32</code></pre>
+</div>
+</div>
+<div id="cell-63" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new column with the year</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>by_year[<span class="st">"year"</span>] <span class="op">=</span> by_year[<span class="st">"date"</span>].dt.year</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop the date column; we could also do this by selecting all columns but</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># the one we want to drop, but this is more explicit</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>by_year <span class="op">=</span> by_year.drop(<span class="st">"date"</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="co"># bring year to the first position</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>by_year <span class="op">=</span> by_year[[<span class="st">"year"</span>, <span class="st">"persons_involved"</span>, <span class="st">"killed_or_injured"</span>]]</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>by_year</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">persons_involved</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2011</td>
+<td>722</td>
+<td>533</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2012</td>
+<td>2289</td>
+<td>1713</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2013</td>
+<td>2271</td>
+<td>1714</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2014</td>
+<td>2429</td>
+<td>1758</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2015</td>
+<td>2859</td>
+<td>1773</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>2016</td>
+<td>3171</td>
+<td>1874</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>2017</td>
+<td>2906</td>
+<td>1725</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2018</td>
+<td>3131</td>
+<td>1886</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2019</td>
+<td>2923</td>
+<td>1752</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>2020</td>
+<td>2577</td>
+<td>1592</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>2021</td>
+<td>2735</td>
+<td>1701</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="optional-cleaning-the-accidents-data" class="level3">
+<h3 class="anchored" data-anchor-id="optional-cleaning-the-accidents-data">(Optional) Cleaning the accidents data</h3>
+<p>We mentioned above that the accidents data is already pretty clean. That’s because we did the below to clean it up. If you’re curious about this (great!), you can add more code cells and copy/paste each segment so you can see some intermediary output as well.</p>
+<div id="cell-65" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dateparser  <span class="co"># for fixing the raw dates</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>accidents <span class="op">=</span> pd.read_csv(<span class="st">"data/estonia-traffic-accidents.csv"</span>)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>accidents.head()</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>accidents.info()</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's only keep a couple of columns for the workshop</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>keep <span class="op">=</span> [<span class="st">"Toimumisaeg"</span>, <span class="st">"Isikuid"</span>, <span class="st">"Hukkunuid"</span>, <span class="st">"Vigastatuid"</span>, <span class="st">"Maakond (PPA)"</span>,</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Jalakäija osalusel"</span>, <span class="st">"Liiklusõnnetuse liik [1]"</span>, <span class="st">"Valgustus [1]"</span>]</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>accidents <span class="op">=</span> accidents[keep]</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Translate the column names to English</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>translate_columns <span class="op">=</span> {<span class="st">"Toimumisaeg"</span>: <span class="st">"date"</span>, <span class="st">"Isikuid"</span>: <span class="st">"persons_involved"</span>, </span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Hukkunuid"</span>: <span class="st">"killed"</span>, <span class="st">"Vigastatuid"</span>: <span class="st">"injured"</span>, </span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Maakond (PPA)"</span>: <span class="st">"county"</span>, </span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Jalakäija osalusel"</span>: <span class="st">"pedestrian_involved"</span>, </span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Liiklusõnnetuse liik [1]"</span>: <span class="st">"accident_type"</span>, </span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Valgustus [1]"</span>: <span class="st">"light_conditions"</span>}</span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>accidents <span class="op">=</span> accidents.rename(columns<span class="op">=</span>translate_columns)</span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a><span class="co"># The original dates have a mix of formats. We're going to use the dateparser</span></span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a><span class="co"># library to help parse these. </span></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>accidents[<span class="st">"date"</span>] <span class="op">=</span> accidents[<span class="st">"date"</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: dateparser.parse(x, languages<span class="op">=</span>[<span class="st">"en"</span>]))</span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a><span class="co"># We've got missing data in several columns. Let's drop those rows.</span></span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Usually you'd want to investigate what is missing and why, but it's fine</span></span>
+<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a><span class="co"># for the workshop since we are just illustrating, not trying to learn anything</span></span>
+<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a><span class="co"># about traffic accidents. </span></span>
+<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a>accidents.isna().<span class="bu">sum</span>()</span>
+<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>accidents <span class="op">=</span> accidents.dropna()</span>
+<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Some of the columns are float but should be integer values.</span></span>
+<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>accidents <span class="op">=</span> accidents.astype({<span class="st">"persons_involved"</span>: <span class="st">"int64"</span>,</span>
+<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"pedestrian_involved"</span>: <span class="st">"int64"</span>})</span>
+<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a><span class="co"># write out the cleaned data. </span></span>
+<span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a><span class="co"># accidents.to_csv("data/estonia-traffic-accidents-clean.csv", index=False)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 15708 entries, 0 to 15707
+Data columns (total 53 columns):
+ #   Column                                         Non-Null Count  Dtype  
+---  ------                                         --------------  -----  
+ 0   Juhtumi nr                                     15708 non-null  object 
+ 1   Toimumisaeg                                    15708 non-null  object 
+ 2   Isikuid                                        15633 non-null  float64
+ 3   Hukkunuid                                      15708 non-null  int64  
+ 4   Vigastatuid                                    15708 non-null  int64  
+ 5   Sõidukeid                                      15633 non-null  float64
+ 6   Aadress (PPA)                                  14601 non-null  object 
+ 7   Maja nr (PPA)                                  6686 non-null   object 
+ 8   Tänav (PPA)                                    14012 non-null  object 
+ 9   Ristuv tänav (PPA)                             2757 non-null   object 
+ 10  Maakond (PPA)                                  14676 non-null  object 
+ 11  Omavalitsus (PPA)                              14670 non-null  object 
+ 12  Asustus (PPA)                                  8822 non-null   object 
+ 13  Asula                                          15708 non-null  object 
+ 14  Liiklusõnnetuse liik [1]                       15708 non-null  object 
+ 15  Liiklusõnnetuse liik [3]                       15708 non-null  object 
+ 16  Kergliikurijuhi osalusel                       15563 non-null  float64
+ 17  Jalakäija osalusel                             15563 non-null  float64
+ 18  Kaassõitja osalusel                            15563 non-null  float64
+ 19  Maastikusõiduki juhi osalusel                  15563 non-null  float64
+ 20  Eaka (65+) mootorsõidukijuhi osalusel          15563 non-null  float64
+ 21  Bussijuhi osalusel                             15563 non-null  float64
+ 22  Veoautojuhi osalusel                           15563 non-null  float64
+ 23  Ühissõidukijuhi osalusel                       15563 non-null  float64
+ 24  Sõiduautojuhi osalusel                         15563 non-null  float64
+ 25  Mootorratturi osalusel                         15563 non-null  float64
+ 26  Mopeedijuhi osalusel                           15563 non-null  float64
+ 27  Jalgratturi osalusel                           15563 non-null  float64
+ 28  Alaealise osalusel                             15563 non-null  float64
+ 29  Turvavarustust mitte kasutanud isiku osalusel  15563 non-null  float64
+ 30  Esmase juhiloa omaniku osalusel                15563 non-null  float64
+ 31  Mootorsõidukijuhi osalusel                     15563 non-null  float64
+ 32  Tüüpskeemi nr                                  15245 non-null  float64
+ 33  Tüüpskeem [2]                                  15245 non-null  object 
+ 34  Tee tüüp [1]                                   15581 non-null  object 
+ 35  Tee tüüp [2]                                   15581 non-null  object 
+ 36  Tee element [1]                                15128 non-null  object 
+ 37  Tee element [2]                                15128 non-null  object 
+ 38  Tee objekt [2]                                 15169 non-null  object 
+ 39  Kurvilisus                                     15199 non-null  object 
+ 40  Tee tasasus                                    15265 non-null  object 
+ 41  Tee seisund                                    15310 non-null  object 
+ 42  Teekate                                        15406 non-null  object 
+ 43  Teekatte seisund [2]                           15356 non-null  object 
+ 44  Sõiduradade arv                                4182 non-null   object 
+ 45  Lubatud sõidukiirus (PPA)                      15164 non-null  float64
+ 46  Tee nr (PPA)                                   4749 non-null   float64
+ 47  Tee km (PPA)                                   4754 non-null   object 
+ 48  Ilmastik [1]                                   15357 non-null  object 
+ 49  Valgustus [1]                                  15396 non-null  object 
+ 50  Valgustus [2]                                  15396 non-null  object 
+ 51  GPS X                                          13464 non-null  float64
+ 52  GPS Y                                          13459 non-null  float64
+dtypes: float64(23), int64(2), object(28)
+memory usage: 6.4+ MB</code></pre>
+</div>
+</div>
+</section>
+<section id="section-2-polars" class="level2">
+<h2 class="anchored" data-anchor-id="section-2-polars">Section 2: polars</h2>
+<p>Polars is a more recent dataframe library, written on top of Rust, which has been gaining a lot of traction. It uses a very different philosopy and style for the API. Both of those (being written in Rust and the API) allow it to be faster and more memory efficient than pandas. It also works out of the box with data that is too large to fit into memory.</p>
+<div>
+<p><img src="https://www.pola.rs/share.jpg" width="600"></p>
+</div>
+<section id="getting-started-1" class="level3">
+<h3 class="anchored" data-anchor-id="getting-started-1">Getting started</h3>
+<p>Let’s redo some of the common dataframe operations we did above, using the accidents data.</p>
+<div id="cell-68" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>accidents <span class="op">=</span> pl.read_csv(<span class="st">"data/estonia-traffic-accidents-clean.csv"</span>)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>accidents.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 8)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">persons_involved</th>
+<th data-quarto-table-cell-role="th">killed</th>
+<th data-quarto-table-cell-role="th">injured</th>
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">pedestrian_involved</th>
+<th data-quarto-table-cell-role="th">accident_type</th>
+<th data-quarto-table-cell-role="th">light_conditions</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>i64</th>
+<th>i64</th>
+<th>i64</th>
+<th>str</th>
+<th>i64</th>
+<th>str</th>
+<th>str</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"2014-10-24&nbsp;08:45:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+<td>1</td>
+<td>"Jalakäijaõnnetus"</td>
+<td>"Valge&nbsp;aeg"</td>
+</tr>
+<tr class="even">
+<td>"2014-10-24&nbsp;13:45:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+<td>0</td>
+<td>"Kokkupõrge"</td>
+<td>"Valge&nbsp;aeg"</td>
+</tr>
+<tr class="odd">
+<td>"2014-08-11&nbsp;00:00:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+<td>0</td>
+<td>"Kokkupõrge"</td>
+<td>"Valge&nbsp;aeg"</td>
+</tr>
+<tr class="even">
+<td>"2014-11-17&nbsp;17:32:00"</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>"Harju&nbsp;maakond"</td>
+<td>0</td>
+<td>"Kokkupõrge"</td>
+<td>"Pimeda&nbsp;aeg"</td>
+</tr>
+<tr class="odd">
+<td>"2015-04-28&nbsp;07:55:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+<td>0</td>
+<td>"Kokkupõrge"</td>
+<td>"Valge&nbsp;aeg"</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="some-basic-differences-from-pandas" class="level3">
+<h3 class="anchored" data-anchor-id="some-basic-differences-from-pandas">Some basic differences from pandas</h3>
+<p>Like pandas, polars <a href="https://docs.pola.rs/api/python/stable/reference/dataframe/index.html"><strong>DataFrame</strong>s</a> are composed of <a href="https://docs.pola.rs/api/python/stable/reference/series/index.html"><strong>Series</strong></a>. You’ll soon see that the API has a quite different style. Some other big differences:</p>
+<ul>
+<li>No index.</li>
+<li>The use of square brackets <code>[]</code> is discouraged, use methods instead.</li>
+<li>Within reason, you want to use method chaining and do related things together, rather than splitting transformations line by line. This is so that the query optimizer can do it’s thing under the hood.</li>
+<li>Expressions</li>
+</ul>
+<p>Polars also has a a doc section for <a href="https://docs.pola.rs/user-guide/migration/pandas/">Coming from Pandas</a>.</p>
+<p>The biggest conceptual difference from pandas are expressions. So let’s talk about those, after a brief detour on how to select columns (since we will use that to illustrate expressions).</p>
+</section>
+<section id="selecting-columns-1" class="level3">
+<h3 class="anchored" data-anchor-id="selecting-columns-1">Selecting columns</h3>
+<p>With the <code>select()</code> method:</p>
+<div id="cell-71" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>accidents.select(<span class="st">"date"</span>, <span class="st">"county"</span>).head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 2)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">county</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>str</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"2014-10-24&nbsp;08:45:00"</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="even">
+<td>"2014-10-24&nbsp;13:45:00"</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="odd">
+<td>"2014-08-11&nbsp;00:00:00"</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="even">
+<td>"2014-11-17&nbsp;17:32:00"</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="odd">
+<td>"2015-04-28&nbsp;07:55:00"</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="expressions" class="level3">
+<h3 class="anchored" data-anchor-id="expressions">Expressions</h3>
+<p>Polars relies very heavily on expressions. These are <strong>data transformations</strong> that abstractly define what we want to do with some data, and operate within a <strong>context</strong> that provides data to apply those changes to actual data.</p>
+<p><code>select()</code> is one of the contexts in which an expression can be executed. One of the most basic expressions is <code>pl.col()</code>, which selects a column in the context provided. We can use this to select a column, like we did above.</p>
+<div id="cell-73" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>accidents.select(pl.col(<span class="st">"date"</span>)).head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 1)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">date</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"2014-10-24&nbsp;08:45:00"</td>
+</tr>
+<tr class="even">
+<td>"2014-10-24&nbsp;13:45:00"</td>
+</tr>
+<tr class="odd">
+<td>"2014-08-11&nbsp;00:00:00"</td>
+</tr>
+<tr class="even">
+<td>"2014-11-17&nbsp;17:32:00"</td>
+</tr>
+<tr class="odd">
+<td>"2015-04-28&nbsp;07:55:00"</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<section id="composing-expressions" class="level4">
+<h4 class="anchored" data-anchor-id="composing-expressions">Composing expressions</h4>
+<p>What’s the point of that? By itself having a more verbose method to select columns is not that useful, but what is very useful is that we can compose expressions to do many useful things. For example:</p>
+</section>
+<section id="how-many-people-were-injured-or-killed-in-the-biggest-accident-in-the-data" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-people-were-injured-or-killed-in-the-biggest-accident-in-the-data">How many people were injured or killed in the biggest accident in the data?</h4>
+<div id="cell-75" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>accidents.select(</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># select 'killed'</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"killed"</span>)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add 'injured'</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    .add(pl.col(<span class="st">"injured"</span>))</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># give the result a new column name</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    .alias(<span class="st">"killed_or_injured"</span>)</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># identify the max value</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">max</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (1, 1)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+</tr>
+<tr class="odd">
+<th>i64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>23</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="contexts" class="level4">
+<h4 class="anchored" data-anchor-id="contexts">Contexts</h4>
+<p>There are 4 contexts in which expressions can be used:</p>
+<ul>
+<li><code>select()</code></li>
+<li><code>filter()</code></li>
+<li><code>with_columns()</code> to mutate data frames</li>
+<li><code>group_by()</code> and aggregations</li>
+</ul>
+<p>We’ll see all of those below.</p>
+<p>For more on the <em>concept</em> of expressions in polars, see the <a href="https://docs.pola.rs/user-guide/concepts/expressions-and-contexts/">Expressions and contexts</a> section in the documentation.</p>
+<p>For a list of available expressions, see <a href="https://docs.pola.rs/user-guide/expressions/">this more conceptual overview</a> in the user guide, or the <a href="https://docs.pola.rs/api/python/stable/reference/expressions/index.html">Python API reference on expressions</a>.</p>
+</section>
+</section>
+<section id="filtering-rows" class="level3">
+<h3 class="anchored" data-anchor-id="filtering-rows">Filtering rows</h3>
+<p>Using <code>filter()</code>:</p>
+<div id="cell-78" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>accidents.<span class="bu">filter</span>(pl.col(<span class="st">"county"</span>).eq(<span class="st">"Harju maakond"</span>)).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<pre><code>(7000, 8)</code></pre>
+</div>
+</div>
+<p>(You can generally use operators like <code>==</code>, <code>+</code>, <code>-</code> as you’d expect them to work, the only thing is that if you wanted to do something further with the result, you’d have to wrap the calculation in extra parentheses, like <code>(pl.col("a") + pl.col("b")).max()</code>, versus <code>pl.col("a").add(pl.col("b")).max()</code>.)</p>
+<p>Another small example of how expressions can make life easier is below. Instead of filtering using the full county name “Harju maakond”, we can just look for strings that contain the substring “Harju”.</p>
+<div id="cell-80" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>accidents.<span class="bu">filter</span>(pl.col(<span class="st">"county"</span>).<span class="bu">str</span>.contains(<span class="st">"Harju"</span>)).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>(7000, 8)</code></pre>
+</div>
+</div>
+<div id="cell-81" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>accidents.<span class="bu">filter</span>(pl.col(<span class="st">"county"</span>)<span class="op">==</span><span class="st">"Harju maakond"</span>).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>(7000, 8)</code></pre>
+</div>
+</div>
+</section>
+<section id="mutating-dataframes" class="level3">
+<h3 class="anchored" data-anchor-id="mutating-dataframes">Mutating dataframes</h3>
+<p>You use <code>with_columns()</code> and various expressions to mutate (add, change) columns in a dataframe. Here is how you would add a “killed_or_injured” column, like we did with pandas earlier.</p>
+<div id="cell-83" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>accidents <span class="op">=</span> accidents.with_columns(</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"killed"</span>).add(pl.col(<span class="st">"injured"</span>)).alias(<span class="st">"killed_or_injured"</span>)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>accidents.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 9)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">persons_involved</th>
+<th data-quarto-table-cell-role="th">killed</th>
+<th data-quarto-table-cell-role="th">injured</th>
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">pedestrian_involved</th>
+<th data-quarto-table-cell-role="th">accident_type</th>
+<th data-quarto-table-cell-role="th">light_conditions</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>i64</th>
+<th>i64</th>
+<th>i64</th>
+<th>str</th>
+<th>i64</th>
+<th>str</th>
+<th>str</th>
+<th>i64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"2014-10-24&nbsp;08:45:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+<td>1</td>
+<td>"Jalakäijaõnnetus"</td>
+<td>"Valge&nbsp;aeg"</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>"2014-10-24&nbsp;13:45:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+<td>0</td>
+<td>"Kokkupõrge"</td>
+<td>"Valge&nbsp;aeg"</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>"2014-08-11&nbsp;00:00:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+<td>0</td>
+<td>"Kokkupõrge"</td>
+<td>"Valge&nbsp;aeg"</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>"2014-11-17&nbsp;17:32:00"</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>"Harju&nbsp;maakond"</td>
+<td>0</td>
+<td>"Kokkupõrge"</td>
+<td>"Pimeda&nbsp;aeg"</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>"2015-04-28&nbsp;07:55:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+<td>0</td>
+<td>"Kokkupõrge"</td>
+<td>"Valge&nbsp;aeg"</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="group-and-aggregate" class="level3">
+<h3 class="anchored" data-anchor-id="group-and-aggregate">Group and aggregate</h3>
+<p>Instead of calculating the number of victims by accident type or year, as we did above, let’s do by county instead.</p>
+<div id="cell-85" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>by_county <span class="op">=</span> (accidents</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>             .group_by(<span class="st">"county"</span>)</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>             .agg(pl.col(<span class="st">"killed_or_injured"</span>).<span class="bu">sum</span>())</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>             .sort(<span class="st">"killed_or_injured"</span>, descending<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>by_county.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 2)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>i64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"Harju&nbsp;maakond"</td>
+<td>8423</td>
+</tr>
+<tr class="even">
+<td>"Tartu&nbsp;maakond"</td>
+<td>1968</td>
+</tr>
+<tr class="odd">
+<td>"Ida-Viru&nbsp;maakond"</td>
+<td>1348</td>
+</tr>
+<tr class="even">
+<td>"Pärnu&nbsp;maakond"</td>
+<td>1293</td>
+</tr>
+<tr class="odd">
+<td>"Lääne-Viru&nbsp;maakond"</td>
+<td>883</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="optional-joining-dataframes" class="level3">
+<h3 class="anchored" data-anchor-id="optional-joining-dataframes">(Optional) Joining dataframes</h3>
+<p>Often you have information in different dataframes (tables) that you want to join (or merge) together. For example, what if we want to know the accident rate per capita by county? For this we can first group and aggregate to get the county-level number of accident victims, then join a table with population figures for each county.</p>
+<p>Since we conveniently already have county-level data from above, we just need to read and join in the county population data.</p>
+<p>(Data are from <a href="https://andmed.stat.ee/en/stat/rahvastik__rahvastikunaitajad-ja-koosseis__rahvaarv-ja-rahvastiku-koosseis/RV022U">Statistics Estonia</a>)</p>
+<div id="cell-87" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>county_pop <span class="op">=</span> (pl.read_csv(<span class="st">"data/county-pop.csv"</span>, skip_rows<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>              .rename({<span class="st">"County"</span>: <span class="st">"county"</span>, <span class="st">"Age groups total"</span>: <span class="st">"population"</span>})</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>              .select([<span class="st">"county"</span>, <span class="st">"population"</span>])</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>              <span class="co"># this has "county" in the county names, not "maakond"</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>              .with_columns(pl.col(<span class="st">"county"</span>).<span class="bu">str</span>.replace(<span class="st">"county"</span>, <span class="st">"maakond"</span>))</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>              )</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>by_county_w_pop <span class="op">=</span> by_county.join(county_pop, on<span class="op">=</span><span class="st">"county"</span>, how<span class="op">=</span><span class="st">"left"</span>)</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>by_county_w_pop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (15, 3)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+<th data-quarto-table-cell-role="th">population</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>i64</th>
+<th>i64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"Harju&nbsp;maakond"</td>
+<td>8423</td>
+<td>598059</td>
+</tr>
+<tr class="even">
+<td>"Tartu&nbsp;maakond"</td>
+<td>1968</td>
+<td>152977</td>
+</tr>
+<tr class="odd">
+<td>"Ida-Viru&nbsp;maakond"</td>
+<td>1348</td>
+<td>136240</td>
+</tr>
+<tr class="even">
+<td>"Pärnu&nbsp;maakond"</td>
+<td>1293</td>
+<td>85938</td>
+</tr>
+<tr class="odd">
+<td>"Lääne-Viru&nbsp;maakond"</td>
+<td>883</td>
+<td>59325</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr class="odd">
+<td>"Saare&nbsp;maakond"</td>
+<td>413</td>
+<td>33108</td>
+</tr>
+<tr class="even">
+<td>"Valga&nbsp;maakond"</td>
+<td>400</td>
+<td>28370</td>
+</tr>
+<tr class="odd">
+<td>"Põlva&nbsp;maakond"</td>
+<td>383</td>
+<td>25006</td>
+</tr>
+<tr class="even">
+<td>"Lääne&nbsp;maakond"</td>
+<td>272</td>
+<td>20507</td>
+</tr>
+<tr class="odd">
+<td>"Hiiu&nbsp;maakond"</td>
+<td>76</td>
+<td>9387</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="cell-88" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>by_county_w_pop.select(</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"county"</span>), </span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"killed_or_injured"</span>),</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"killed_or_injured"</span>).truediv(pl.col(<span class="st">"population"</span>)).mul(<span class="dv">1000</span>).alias(<span class="st">"rate/1000"</span>)</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>    ).head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (3, 3)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+<th data-quarto-table-cell-role="th">rate/1000</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>i64</th>
+<th>f64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"Harju&nbsp;maakond"</td>
+<td>8423</td>
+<td>14.083895</td>
+</tr>
+<tr class="even">
+<td>"Tartu&nbsp;maakond"</td>
+<td>1968</td>
+<td>12.864679</td>
+</tr>
+<tr class="odd">
+<td>"Ida-Viru&nbsp;maakond"</td>
+<td>1348</td>
+<td>9.894304</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Which 3 counties have the highest vehicle accident victim rates?</p>
+<div id="cell-90" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Which 3 counties have the lowest vehicle accident victim rates?</p>
+<div id="cell-92" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="optional-reshaping-pivoting-dataframes" class="level3">
+<h3 class="anchored" data-anchor-id="optional-reshaping-pivoting-dataframes">(Optional) Reshaping / pivoting dataframes</h3>
+<p>For this we will look at another dataset, on reflector usage. (🌃🎄 Tis’ the time of year…)</p>
+<div id="cell-94" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>reflectors <span class="op">=</span> (pl.read_csv(<span class="st">"data/reflectors.csv"</span>, has_header<span class="op">=</span><span class="va">True</span>, separator<span class="op">=</span><span class="st">";"</span>, skip_rows<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>              .<span class="bu">filter</span>(pl.col(<span class="st">"Sex"</span>).ne(<span class="st">"Men and women"</span>))</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>              .drop([<span class="st">"Type of data"</span>, <span class="st">"Year"</span>, <span class="st">"All age groups (16-64)"</span>])</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>reflectors.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="43">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 7)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">Reflector use</th>
+<th data-quarto-table-cell-role="th">Sex</th>
+<th data-quarto-table-cell-role="th">16-24</th>
+<th data-quarto-table-cell-role="th">25-34</th>
+<th data-quarto-table-cell-role="th">35-44</th>
+<th data-quarto-table-cell-role="th">45-54</th>
+<th data-quarto-table-cell-role="th">55-64</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>str</th>
+<th>f64</th>
+<th>f64</th>
+<th>f64</th>
+<th>f64</th>
+<th>f64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"Never"</td>
+<td>"Men"</td>
+<td>14.3</td>
+<td>12.4</td>
+<td>7.2</td>
+<td>3.9</td>
+<td>2.7</td>
+</tr>
+<tr class="even">
+<td>"Never"</td>
+<td>"Women"</td>
+<td>8.8</td>
+<td>5.0</td>
+<td>4.6</td>
+<td>2.0</td>
+<td>2.5</td>
+</tr>
+<tr class="odd">
+<td>"Sometimes"</td>
+<td>"Men"</td>
+<td>46.7</td>
+<td>36.2</td>
+<td>30.9</td>
+<td>26.1</td>
+<td>28.7</td>
+</tr>
+<tr class="even">
+<td>"Sometimes"</td>
+<td>"Women"</td>
+<td>29.6</td>
+<td>26.0</td>
+<td>20.6</td>
+<td>14.8</td>
+<td>13.7</td>
+</tr>
+<tr class="odd">
+<td>"Nearly&nbsp;always"</td>
+<td>"Men"</td>
+<td>34.3</td>
+<td>40.5</td>
+<td>52.2</td>
+<td>58.6</td>
+<td>55.9</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>After some basic cleaning, we can see that this dataframe has a not uncommon pattern, time series represented as rows, not columns, with their ID label as the column name. That’s fine for presentation purposes when you look at the table, but for plotting life will be easier if we reshape this data from the current wide format to a long format.</p>
+<p>We want to create two new columns from all the “16-24” etc. columns:</p>
+<ul>
+<li>One with the age group information.</li>
+<li>The other with the reflector usage values.</li>
+</ul>
+<div id="cell-96" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>reflectors <span class="op">=</span> (reflectors</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>              .unpivot(index<span class="op">=</span>[<span class="st">"Reflector use"</span>, <span class="st">"Sex"</span>], </span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>                       variable_name<span class="op">=</span><span class="st">"age_group"</span>, </span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>                       value_name<span class="op">=</span><span class="st">"percentage"</span>)</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>reflectors.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 4)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">Reflector use</th>
+<th data-quarto-table-cell-role="th">Sex</th>
+<th data-quarto-table-cell-role="th">age_group</th>
+<th data-quarto-table-cell-role="th">percentage</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>str</th>
+<th>str</th>
+<th>f64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"Never"</td>
+<td>"Men"</td>
+<td>"16-24"</td>
+<td>14.3</td>
+</tr>
+<tr class="even">
+<td>"Never"</td>
+<td>"Women"</td>
+<td>"16-24"</td>
+<td>8.8</td>
+</tr>
+<tr class="odd">
+<td>"Sometimes"</td>
+<td>"Men"</td>
+<td>"16-24"</td>
+<td>46.7</td>
+</tr>
+<tr class="even">
+<td>"Sometimes"</td>
+<td>"Women"</td>
+<td>"16-24"</td>
+<td>29.6</td>
+</tr>
+<tr class="odd">
+<td>"Nearly&nbsp;always"</td>
+<td>"Men"</td>
+<td>"16-24"</td>
+<td>34.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="cell-97" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>(reflectors</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a> .<span class="bu">filter</span>(pl.col(<span class="st">"Reflector use"</span>).eq(<span class="st">"Never"</span>))</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a> .plot.line(x <span class="op">=</span> <span class="st">"age_group"</span>, y <span class="op">=</span> <span class="st">"percentage"</span>, color <span class="op">=</span> <span class="st">"Sex"</span>)</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a> .properties(</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">600</span>,</span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="dv">300</span></span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="45">
+
+<style>
+  #altair-viz-9165413ec1604a56bc5249a26cd88edc.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-9165413ec1604a56bc5249a26cd88edc.vega-embed details,
+  #altair-viz-9165413ec1604a56bc5249a26cd88edc.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-9165413ec1604a56bc5249a26cd88edc"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-9165413ec1604a56bc5249a26cd88edc") {
+      outputDiv = document.getElementById("altair-viz-9165413ec1604a56bc5249a26cd88edc");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-70ba5e9649ef105c097b9c80302ecebf"}, "mark": {"type": "line", "tooltip": true}, "encoding": {"color": {"field": "Sex", "type": "nominal"}, "x": {"field": "age_group", "type": "nominal"}, "y": {"field": "percentage", "type": "quantitative"}}, "height": 300, "params": [{"name": "param_1", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "width": 600, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-70ba5e9649ef105c097b9c80302ecebf": [{"Reflector use": "Never", "Sex": "Men", "age_group": "16-24", "percentage": 14.3}, {"Reflector use": "Never", "Sex": "Women", "age_group": "16-24", "percentage": 8.8}, {"Reflector use": "Never", "Sex": "Men", "age_group": "25-34", "percentage": 12.4}, {"Reflector use": "Never", "Sex": "Women", "age_group": "25-34", "percentage": 5.0}, {"Reflector use": "Never", "Sex": "Men", "age_group": "35-44", "percentage": 7.2}, {"Reflector use": "Never", "Sex": "Women", "age_group": "35-44", "percentage": 4.6}, {"Reflector use": "Never", "Sex": "Men", "age_group": "45-54", "percentage": 3.9}, {"Reflector use": "Never", "Sex": "Women", "age_group": "45-54", "percentage": 2.0}, {"Reflector use": "Never", "Sex": "Men", "age_group": "55-64", "percentage": 2.7}, {"Reflector use": "Never", "Sex": "Women", "age_group": "55-64", "percentage": 2.5}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>Classic. Men don’t wear reflectors as much as women. Old people are less likely to say that they never wear reflectors.</p>
+<p>Actually I’m not sure who in Estonia lives in a place where they can only walk on well-lit streets. Let’s combine that category with “Never”.</p>
+<div id="cell-99" class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>(reflectors.</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a> with_columns(</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>     pl.col(<span class="st">"Reflector use"</span>).<span class="bu">str</span>.replace(<span class="st">"Never walk on dark streets, roads"</span>, <span class="st">"Never"</span>)</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a> .group_by([<span class="st">"Reflector use"</span>, <span class="st">"Sex"</span>, <span class="st">"age_group"</span>])</span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a> .agg(pl.col(<span class="st">"percentage"</span>).<span class="bu">sum</span>())</span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a> .<span class="bu">filter</span>(pl.col(<span class="st">"Reflector use"</span>).eq(<span class="st">"Never"</span>))</span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a> .sort([<span class="st">"age_group"</span>, <span class="st">"Sex"</span>])</span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a> .plot.line(x <span class="op">=</span> <span class="st">"age_group"</span>, y <span class="op">=</span> <span class="st">"percentage"</span>, color <span class="op">=</span> <span class="st">"Sex"</span>)</span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a> .properties(</span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">600</span>,</span>
+<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="dv">300</span></span>
+<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="46">
+
+<style>
+  #altair-viz-917b52efd21e4d10b5fcf969e65cbf8b.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-917b52efd21e4d10b5fcf969e65cbf8b.vega-embed details,
+  #altair-viz-917b52efd21e4d10b5fcf969e65cbf8b.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-917b52efd21e4d10b5fcf969e65cbf8b"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-917b52efd21e4d10b5fcf969e65cbf8b") {
+      outputDiv = document.getElementById("altair-viz-917b52efd21e4d10b5fcf969e65cbf8b");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-27e5d22aab58dfda62b4b83959d4e130"}, "mark": {"type": "line", "tooltip": true}, "encoding": {"color": {"field": "Sex", "type": "nominal"}, "x": {"field": "age_group", "type": "nominal"}, "y": {"field": "percentage", "type": "quantitative"}}, "height": 300, "params": [{"name": "param_2", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "width": 600, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-27e5d22aab58dfda62b4b83959d4e130": [{"Reflector use": "Never", "Sex": "Men", "age_group": "16-24", "percentage": 19.1}, {"Reflector use": "Never", "Sex": "Women", "age_group": "16-24", "percentage": 12.0}, {"Reflector use": "Never", "Sex": "Men", "age_group": "25-34", "percentage": 23.200000000000003}, {"Reflector use": "Never", "Sex": "Women", "age_group": "25-34", "percentage": 9.1}, {"Reflector use": "Never", "Sex": "Men", "age_group": "35-44", "percentage": 16.9}, {"Reflector use": "Never", "Sex": "Women", "age_group": "35-44", "percentage": 8.0}, {"Reflector use": "Never", "Sex": "Men", "age_group": "45-54", "percentage": 15.200000000000001}, {"Reflector use": "Never", "Sex": "Women", "age_group": "45-54", "percentage": 6.9}, {"Reflector use": "Never", "Sex": "Men", "age_group": "55-64", "percentage": 15.5}, {"Reflector use": "Never", "Sex": "Women", "age_group": "55-64", "percentage": 11.4}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>Hmm. Maybe some people really don’t walk a lot, but it’s also likely that a lot of people, especially older people, don’t see the need to wear reflectors.</p>
+<section id="sidebar-on-terminology" class="level4">
+<h4 class="anchored" data-anchor-id="sidebar-on-terminology">Sidebar on terminology</h4>
+<p>There is a plethora of names to refer to the two basic directions of data reshaping.</p>
+<p>For wide to long, like we did here, <strong>polars</strong> uses <code>unpivot()</code>, <strong>pandas</strong> calls it <code>melt()</code>, and R’s <strong>dplyr</strong> calls it…<code>pivot_longer()</code>.</p>
+<p>For the opposite, long to wider, <strong>polars</strong> and <strong>pandas</strong> both use <code>pivot()</code>, while R’s <strong>dplyr</strong> calls it <code>pivot_sider()</code>. It’s sometimes also referred to as “cast”.</p>
+<p>To make things supremely confusing, spreadsheet software like Excel or Google Sheets also has the concept of a pivot table, which doesn’t just pivot, but also summarizes data values. Unlike what we are doing here, where we are only changing the shape of our data, not values themselves.</p>
+</section>
+</section>
+<section id="optional-lazyframes-and-bigger-than-memory-data" class="level3">
+<h3 class="anchored" data-anchor-id="optional-lazyframes-and-bigger-than-memory-data">(Optional) LazyFrames and bigger than memory data</h3>
+<p>Aside from regular DataFrames, <strong>polars</strong> also has the concept of LazyFrames. These are abstract dataframes from some external source that are not read into memory (materialized) until you do something with them. And depending on what you do with them, this sometimes means that you can work with larger than memory datasets.</p>
+<p>We’re not going to work with a 30GB dataset here, so let’s just illustrate the intitution here with some code:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>smaller_data <span class="op">=</span> (pl.scan_csv(<span class="st">"huge/datafile.csv"</span>)</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>                .select(<span class="st">"id1"</span>, <span class="st">"x1"</span>, <span class="st">"x2"</span>)</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>                .<span class="bu">filter</span>(pl.col(<span class="st">"id1"</span>) <span class="op">&gt;</span> <span class="dv">100</span>)</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>                .collect())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>What this does is read data from a CSV, select 3 columns, and filter rows based on “id1” being greater than 100.</p>
+<p>There are two key bits here:</p>
+<ul>
+<li><code>pl.scan_csv()</code>: unlike <code>read_csv()</code>, this does not immediately read the entire data into memory, but rather streams it…and only once we tell it to.</li>
+<li><code>collect()</code> to indicate that we want to start executing (materializing) our query.</li>
+</ul>
+<p>What will happen with the particular code we have above is that polars will analyze our query and then applie to memory-saving optimizations:</p>
+<ul>
+<li>It will only consider data that is in the 3 columns we selected.</li>
+<li>From those columns, it will only read rows (elements) that satisfy our filter condition.</li>
+</ul>
+<p>More on LazyFrames and the <a href="https://docs.pola.rs/user-guide/lazy/">Lazy API</a> at the user guide.</p>
+</section>
+</section>
+<section id="pro-tip-always-plot-your-data" class="level2">
+<h2 class="anchored" data-anchor-id="pro-tip-always-plot-your-data">Pro-tip: always plot your data</h2>
+<p>Sometimes your job is to pipe data from A to B, and that’s fine.</p>
+<p>But if you are doing data analysis or modeling (AI, ML, …), it often pays to be curious (and suspicious) about your data. Sometimes this helps you catch errors in what you are doing with the data. Othertimes it helps you reduce the “garbage in” part of the “garbage in, garbace out” equation.</p>
+<p>Here’s a cute example some people created to make this point. We have two data sets, is there anything unusual about them?</p>
+<div id="cell-104" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> pl.read_csv(<span class="st">"data/dataset1.csv"</span>)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pl.read_csv(<span class="st">"data/dataset2.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The data appear to be similar. Same number of rows and columns.</p>
+<div id="cell-106" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>df1.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="48">
+<pre><code>(142, 2)</code></pre>
+</div>
+</div>
+<div id="cell-107" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>df2.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="49">
+<pre><code>(142, 2)</code></pre>
+</div>
+</div>
+<p>They also have similar distributions:</p>
+<div id="cell-109" class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>df1.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="50">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (9, 3)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">statistic</th>
+<th data-quarto-table-cell-role="th">x</th>
+<th data-quarto-table-cell-role="th">y</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>f64</th>
+<th>f64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"count"</td>
+<td>142.0</td>
+<td>142.0</td>
+</tr>
+<tr class="even">
+<td>"null_count"</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td>"mean"</td>
+<td>54.2661</td>
+<td>47.834721</td>
+</tr>
+<tr class="even">
+<td>"std"</td>
+<td>16.769825</td>
+<td>26.939743</td>
+</tr>
+<tr class="odd">
+<td>"min"</td>
+<td>15.56075</td>
+<td>0.015119</td>
+</tr>
+<tr class="even">
+<td>"25%"</td>
+<td>39.706326</td>
+<td>24.46783</td>
+</tr>
+<tr class="odd">
+<td>"50%"</td>
+<td>53.421463</td>
+<td>48.398346</td>
+</tr>
+<tr class="even">
+<td>"75%"</td>
+<td>69.359559</td>
+<td>71.806616</td>
+</tr>
+<tr class="odd">
+<td>"max"</td>
+<td>91.639961</td>
+<td>97.475771</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="cell-110" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>df2.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="51">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (9, 3)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">statistic</th>
+<th data-quarto-table-cell-role="th">x</th>
+<th data-quarto-table-cell-role="th">y</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>f64</th>
+<th>f64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"count"</td>
+<td>142.0</td>
+<td>142.0</td>
+</tr>
+<tr class="even">
+<td>"null_count"</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td>"mean"</td>
+<td>54.263273</td>
+<td>47.832253</td>
+</tr>
+<tr class="even">
+<td>"std"</td>
+<td>16.765142</td>
+<td>26.935403</td>
+</tr>
+<tr class="odd">
+<td>"min"</td>
+<td>22.3077</td>
+<td>2.9487</td>
+</tr>
+<tr class="even">
+<td>"25%"</td>
+<td>44.1026</td>
+<td>25.2564</td>
+</tr>
+<tr class="odd">
+<td>"50%"</td>
+<td>53.5897</td>
+<td>46.0256</td>
+</tr>
+<tr class="even">
+<td>"75%"</td>
+<td>64.8718</td>
+<td>69.1026</td>
+</tr>
+<tr class="odd">
+<td>"max"</td>
+<td>98.2051</td>
+<td>99.4872</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>As you can guess from the section heading, we should try plotting them. (If the “x” and “y” column names weren’t hint enough by themselves…)</p>
+<div id="cell-112" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>df1.plot.point(<span class="st">"x"</span>, <span class="st">"y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="52">
+
+<style>
+  #altair-viz-ba57ca3272814ffa9a753feccc3ace14.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-ba57ca3272814ffa9a753feccc3ace14.vega-embed details,
+  #altair-viz-ba57ca3272814ffa9a753feccc3ace14.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-ba57ca3272814ffa9a753feccc3ace14"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-ba57ca3272814ffa9a753feccc3ace14") {
+      outputDiv = document.getElementById("altair-viz-ba57ca3272814ffa9a753feccc3ace14");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-78727878deffc03edc1c0ce70647bd8f"}, "mark": {"type": "point", "tooltip": true}, "encoding": {"x": {"field": "x", "type": "quantitative"}, "y": {"field": "y", "type": "quantitative"}}, "params": [{"name": "param_3", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-78727878deffc03edc1c0ce70647bd8f": [{"x": 32.3311102266, "y": 61.411101248}, {"x": 53.4214628807, "y": 26.1868803879}, {"x": 63.92020226, "y": 30.8321939163}, {"x": 70.2895057187, "y": 82.5336485877}, {"x": 34.1188302357, "y": 45.7345513203}, {"x": 67.6707164012, "y": 37.110947969}, {"x": 53.2591294055, "y": 97.4757710964}, {"x": 63.5149808671, "y": 25.1000785788}, {"x": 67.9805388133, "y": 80.9571652197}, {"x": 67.3724659005, "y": 29.720400203}, {"x": 15.5607495229, "y": 80.0656402858}, {"x": 71.7907676942, "y": 71.0654666627}, {"x": 70.2425464362, "y": 24.1095975542}, {"x": 64.9374355444, "y": 81.5542049945}, {"x": 62.2135245453, "y": 21.4758389969}, {"x": 67.2694004772, "y": 18.7089683725}, {"x": 40.5701970446, "y": 79.3729634752}, {"x": 74.7411813341, "y": 21.1016372041}, {"x": 71.7683189223, "y": 20.0110618423}, {"x": 76.1669198143, "y": 75.9361704048}, {"x": 65.6236574431, "y": 15.5828033531}, {"x": 50.8506336394, "y": 13.9876016304}, {"x": 33.0240700249, "y": 24.4678303872}, {"x": 39.7063261674, "y": 84.2752871038}, {"x": 45.5964849542, "y": 9.76334884943}, {"x": 42.9680469104, "y": 17.9454583961}, {"x": 52.4944067819, "y": 16.0511142003}, {"x": 46.0822757831, "y": 23.1104578154}, {"x": 74.2477082092, "y": 20.314187812}, {"x": 64.5682641863, "y": 83.6396338956}, {"x": 74.0216939058, "y": 76.1282745076}, {"x": 62.3911805626, "y": 5.62307076073}, {"x": 74.189036683, "y": 68.1335832223}, {"x": 28.2367819396, "y": 56.1395964513}, {"x": 75.7719387944, "y": 69.8292300322}, {"x": 75.8552294691, "y": 62.5170442862}, {"x": 65.9708570175, "y": 72.7448559954}, {"x": 21.7780404779, "y": 6.61662530728}, {"x": 67.7597962473, "y": 72.4212015285}, {"x": 78.6171953363, "y": 52.5752573142}, {"x": 68.5077081898, "y": 15.4569189652}, {"x": 74.8850211598, "y": 25.4166063231}, {"x": 66.4549036599, "y": 19.8366286542}, {"x": 77.3178020985, "y": 48.3983464352}, {"x": 58.9124603193, "y": 75.6677562173}, {"x": 57.617447817, "y": 8.19480060319}, {"x": 76.0882257967, "y": 59.6799300235}, {"x": 57.4660505497, "y": 1.50441817488}, {"x": 79.4283834934, "y": 45.2107942872}, {"x": 76.3565221496, "y": 10.4182411281}, {"x": 64.4050752632, "y": 78.5841760758}, {"x": 40.6350418091, "y": 73.3947503698}, {"x": 43.9498645857, "y": 75.9587156671}, {"x": 30.9962205791, "y": 71.694404938}, {"x": 68.2307689907, "y": 80.8725016628}, {"x": 72.0463894612, "y": 12.9180067349}, {"x": 46.5927679682, "y": 84.9723827774}, {"x": 49.2572183396, "y": 81.8814032306}, {"x": 42.7817612539, "y": 12.9911884302}, {"x": 65.475952195, "y": 14.2745856444}, {"x": 71.9650826544, "y": 17.7102359443}, {"x": 32.1464623358, "y": 43.4817094425}, {"x": 31.8384976954, "y": 71.8121653901}, {"x": 31.0052582572, "y": 40.682503007}, {"x": 80.4708943189, "y": 49.5021483467}, {"x": 71.9641671122, "y": 41.8742826668}, {"x": 78.0794214417, "y": 93.1333167652}, {"x": 41.6775957748, "y": 30.2012640846}, {"x": 65.953595185, "y": 31.1474060835}, {"x": 62.9344593731, "y": 31.9163906992}, {"x": 64.3737979844, "y": 28.8625834061}, {"x": 72.5093283599, "y": 39.5401302526}, {"x": 30.0522898741, "y": 96.6175423534}, {"x": 28.0033242354, "y": 46.6721919544}, {"x": 75.4012268619, "y": 88.6390766207}, {"x": 38.9800154218, "y": 87.322160691}, {"x": 65.2199135479, "y": 84.6829549336}, {"x": 73.0539899616, "y": 29.3808085571}, {"x": 34.3983616372, "y": 59.5444469033}, {"x": 43.4904501336, "y": 40.782542065}, {"x": 55.138737967, "y": 30.7257603575}, {"x": 43.6843934333, "y": 32.8230098696}, {"x": 35.9036097344, "y": 91.1118630801}, {"x": 45.3780188805, "y": 29.1692166544}, {"x": 39.7774828713, "y": 43.75581895}, {"x": 38.6644611569, "y": 33.3172384774}, {"x": 39.0440366877, "y": 84.6760108316}, {"x": 91.6399614428, "y": 79.4066030605}, {"x": 47.4881326771, "y": 85.3899333808}, {"x": 44.5902125769, "y": 22.0340116412}, {"x": 39.0896145478, "y": 70.4661940802}, {"x": 42.2293783752, "y": 19.9140684075}, {"x": 37.0003871448, "y": 60.264279248}, {"x": 39.0520864793, "y": 70.6525028457}, {"x": 37.4884147432, "y": 60.8144048511}, {"x": 69.3595594592, "y": 65.5213545959}, {"x": 43.542775926, "y": 62.4603112824}, {"x": 39.8112302539, "y": 65.3348328092}, {"x": 70.0689259404, "y": 7.59346560899}, {"x": 70.0405435824, "y": 77.1438066024}, {"x": 39.505789079, "y": 74.8516272173}, {"x": 62.5168908529, "y": 66.4847322418}, {"x": 72.1399254065, "y": 0.0151193251552}, {"x": 45.2515760666, "y": 70.0034213192}, {"x": 42.0633045627, "y": 2.33519661206}, {"x": 36.3556951539, "y": 6.0058486497}, {"x": 30.3918276596, "y": 42.75961287}, {"x": 36.4490038543, "y": 50.5462690659}, {"x": 40.467576002, "y": 60.0275120878}, {"x": 81.7246168002, "y": 6.03754484635}, {"x": 48.8231974964, "y": 76.6353305783}, {"x": 35.6205617651, "y": 57.2860155789}, {"x": 50.5839631148, "y": 71.8066161014}, {"x": 61.8564651063, "y": 71.7927431642}, {"x": 39.3237560262, "y": 59.3008196656}, {"x": 42.1856791429, "y": 66.0348978235}, {"x": 30.8469189898, "y": 37.3416401041}, {"x": 29.3462004281, "y": 42.1487418312}, {"x": 82.1105579783, "y": 1.21055166293}, {"x": 38.3020058088, "y": 60.0177857932}, {"x": 56.5841530218, "y": 70.512514809}, {"x": 33.3393742865, "y": 0.5091067352}, {"x": 78.7742390407, "y": 35.4841012146}, {"x": 27.9226442446, "y": 25.9868781844}, {"x": 71.6978651182, "y": 10.8681445111}, {"x": 74.1383313856, "y": 49.1739189791}, {"x": 32.579020066, "y": 1.80811559665}, {"x": 59.83218542, "y": 69.1525081443}, {"x": 35.0306285457, "y": 12.5366493416}, {"x": 74.3001198284, "y": 42.4770945921}, {"x": 63.2501970628, "y": 65.9524861966}, {"x": 34.1730737648, "y": 25.6936743092}, {"x": 40.9138319319, "y": 38.5590195509}, {"x": 62.8332930874, "y": 62.5108942269}, {"x": 42.4767923803, "y": 56.7312899691}, {"x": 52.0334562787, "y": 64.5666620298}, {"x": 48.9070429644, "y": 74.2877488252}, {"x": 59.8518383854, "y": 72.9583909677}, {"x": 48.9604602016, "y": 72.6295257275}, {"x": 46.8448551673, "y": 36.7917136918}, {"x": 39.9630215796, "y": 42.9449148487}, {"x": 66.704943997, "y": 32.0150954299}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>Ok, all good, looks boring.</p>
+<div id="cell-114" class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>df2.plot.point(<span class="st">"x"</span>, <span class="st">"y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="53">
+
+<style>
+  #altair-viz-46dd72df4c2a416984026a496b0c7046.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-46dd72df4c2a416984026a496b0c7046.vega-embed details,
+  #altair-viz-46dd72df4c2a416984026a496b0c7046.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-46dd72df4c2a416984026a496b0c7046"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-46dd72df4c2a416984026a496b0c7046") {
+      outputDiv = document.getElementById("altair-viz-46dd72df4c2a416984026a496b0c7046");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-eb6365c37c0bb197a00403261ef439fc"}, "mark": {"type": "point", "tooltip": true}, "encoding": {"x": {"field": "x", "type": "quantitative"}, "y": {"field": "y", "type": "quantitative"}}, "params": [{"name": "param_4", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-eb6365c37c0bb197a00403261ef439fc": [{"x": 55.3846, "y": 97.1795}, {"x": 51.5385, "y": 96.0256}, {"x": 46.1538, "y": 94.4872}, {"x": 42.8205, "y": 91.4103}, {"x": 40.7692, "y": 88.3333}, {"x": 38.7179, "y": 84.8718}, {"x": 35.641, "y": 79.8718}, {"x": 33.0769, "y": 77.5641}, {"x": 28.9744, "y": 74.4872}, {"x": 26.1538, "y": 71.4103}, {"x": 23.0769, "y": 66.4103}, {"x": 22.3077, "y": 61.7949}, {"x": 22.3077, "y": 57.1795}, {"x": 23.3333, "y": 52.9487}, {"x": 25.8974, "y": 51.0256}, {"x": 29.4872, "y": 51.0256}, {"x": 32.8205, "y": 51.0256}, {"x": 35.3846, "y": 51.4103}, {"x": 40.2564, "y": 51.4103}, {"x": 44.1026, "y": 52.9487}, {"x": 46.6667, "y": 54.1026}, {"x": 50.0, "y": 55.2564}, {"x": 53.0769, "y": 55.641}, {"x": 56.6667, "y": 56.0256}, {"x": 59.2308, "y": 57.9487}, {"x": 61.2821, "y": 62.1795}, {"x": 61.5385, "y": 66.4103}, {"x": 61.7949, "y": 69.1026}, {"x": 57.4359, "y": 55.2564}, {"x": 54.8718, "y": 49.8718}, {"x": 52.5641, "y": 46.0256}, {"x": 48.2051, "y": 38.3333}, {"x": 49.4872, "y": 42.1795}, {"x": 51.0256, "y": 44.1026}, {"x": 45.3846, "y": 36.4103}, {"x": 42.8205, "y": 32.5641}, {"x": 38.7179, "y": 31.4103}, {"x": 35.1282, "y": 30.2564}, {"x": 32.5641, "y": 32.1795}, {"x": 30.0, "y": 36.7949}, {"x": 33.5897, "y": 41.4103}, {"x": 36.6667, "y": 45.641}, {"x": 38.2051, "y": 49.1026}, {"x": 29.7436, "y": 36.0256}, {"x": 29.7436, "y": 32.1795}, {"x": 30.0, "y": 29.1026}, {"x": 32.0513, "y": 26.7949}, {"x": 35.8974, "y": 25.2564}, {"x": 41.0256, "y": 25.2564}, {"x": 44.1026, "y": 25.641}, {"x": 47.1795, "y": 28.718}, {"x": 49.4872, "y": 31.4103}, {"x": 51.5385, "y": 34.8718}, {"x": 53.5897, "y": 37.5641}, {"x": 55.1282, "y": 40.641}, {"x": 56.6667, "y": 42.1795}, {"x": 59.2308, "y": 44.4872}, {"x": 62.3077, "y": 46.0256}, {"x": 64.8718, "y": 46.7949}, {"x": 67.9487, "y": 47.9487}, {"x": 70.5128, "y": 53.718}, {"x": 71.5385, "y": 60.641}, {"x": 71.5385, "y": 64.4872}, {"x": 69.4872, "y": 69.4872}, {"x": 46.9231, "y": 79.8718}, {"x": 48.2051, "y": 84.1026}, {"x": 50.0, "y": 85.2564}, {"x": 53.0769, "y": 85.2564}, {"x": 55.3846, "y": 86.0256}, {"x": 56.6667, "y": 86.0256}, {"x": 56.1538, "y": 82.9487}, {"x": 53.8462, "y": 80.641}, {"x": 51.2821, "y": 78.718}, {"x": 50.0, "y": 78.718}, {"x": 47.9487, "y": 77.5641}, {"x": 29.7436, "y": 59.8718}, {"x": 29.7436, "y": 62.1795}, {"x": 31.2821, "y": 62.5641}, {"x": 57.9487, "y": 99.4872}, {"x": 61.7949, "y": 99.1026}, {"x": 64.8718, "y": 97.5641}, {"x": 68.4615, "y": 94.1026}, {"x": 70.7692, "y": 91.0256}, {"x": 72.0513, "y": 86.4103}, {"x": 73.8462, "y": 83.3333}, {"x": 75.1282, "y": 79.1026}, {"x": 76.6667, "y": 75.2564}, {"x": 77.6923, "y": 71.4103}, {"x": 79.7436, "y": 66.7949}, {"x": 81.7949, "y": 60.2564}, {"x": 83.3333, "y": 55.2564}, {"x": 85.1282, "y": 51.4103}, {"x": 86.4103, "y": 47.5641}, {"x": 87.9487, "y": 46.0256}, {"x": 89.4872, "y": 42.5641}, {"x": 93.3333, "y": 39.8718}, {"x": 95.3846, "y": 36.7949}, {"x": 98.2051, "y": 33.718}, {"x": 56.6667, "y": 40.641}, {"x": 59.2308, "y": 38.3333}, {"x": 60.7692, "y": 33.718}, {"x": 63.0769, "y": 29.1026}, {"x": 64.1026, "y": 25.2564}, {"x": 64.359, "y": 24.1026}, {"x": 74.359, "y": 22.9487}, {"x": 71.2821, "y": 22.9487}, {"x": 67.9487, "y": 22.1795}, {"x": 65.8974, "y": 20.2564}, {"x": 63.0769, "y": 19.1026}, {"x": 61.2821, "y": 19.1026}, {"x": 58.7179, "y": 18.3333}, {"x": 55.1282, "y": 18.3333}, {"x": 52.3077, "y": 18.3333}, {"x": 49.7436, "y": 17.5641}, {"x": 47.4359, "y": 16.0256}, {"x": 44.8718, "y": 13.718}, {"x": 48.7179, "y": 14.8718}, {"x": 51.2821, "y": 14.8718}, {"x": 54.1026, "y": 14.8718}, {"x": 56.1538, "y": 14.1026}, {"x": 52.0513, "y": 12.5641}, {"x": 48.7179, "y": 11.0256}, {"x": 47.1795, "y": 9.8718}, {"x": 46.1538, "y": 6.0256}, {"x": 50.5128, "y": 9.4872}, {"x": 53.8462, "y": 10.2564}, {"x": 57.4359, "y": 10.2564}, {"x": 60.0, "y": 10.641}, {"x": 64.1026, "y": 10.641}, {"x": 66.9231, "y": 10.641}, {"x": 71.2821, "y": 10.641}, {"x": 74.359, "y": 10.641}, {"x": 78.2051, "y": 10.641}, {"x": 67.9487, "y": 8.718}, {"x": 68.4615, "y": 5.2564}, {"x": 68.2051, "y": 2.9487}, {"x": 37.6923, "y": 25.7692}, {"x": 39.4872, "y": 25.3846}, {"x": 91.2821, "y": 41.5385}, {"x": 50.0, "y": 95.7692}, {"x": 47.9487, "y": 95.0}, {"x": 44.1026, "y": 92.6923}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>Ahaa! 🦖</p>
+</section>
+<section id="appendix" class="level2">
+<h2 class="anchored" data-anchor-id="appendix">Appendix</h2>
+<section id="datasaurus" class="level3">
+<h3 class="anchored" data-anchor-id="datasaurus">Datasaurus</h3>
+<p>The cute point data from the last example came from a dataset called the <a href="https://en.wikipedia.org/wiki/Datasaurus_dozen">Datasaurus dozen</a>, which itself was inspired by an earlier, famous statistical toy dataset, <a href="https://en.wikipedia.org/wiki/Anscombe%27s_quartet">Anscombe’s quartet</a>.</p>
+<p>The other 10 datasaurus plots are also here in the data, we just took out the two above to make life easier for the workshop.</p>
+<div id="cell-118" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co"># split this file but just use it to make a point about also plotting data</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>datasaurus <span class="op">=</span> pd.read_csv(<span class="st">"data/datasaurus.csv"</span>)</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> datasaurus[datasaurus[<span class="st">"dataset"</span>] <span class="op">==</span> <span class="st">"away"</span>].drop(<span class="st">"dataset"</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> datasaurus[datasaurus[<span class="st">"dataset"</span>] <span class="op">==</span> <span class="st">"dino"</span>].drop(<span class="st">"dataset"</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a>df1.to_csv(<span class="st">"data/dataset1.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>df2.to_csv(<span class="st">"data/dataset2.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

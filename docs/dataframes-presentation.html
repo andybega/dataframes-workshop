@@ -1,0 +1,2728 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.5.57">
+
+  <meta name="author" content="Andreas Beger and Isaac Chung   PyData Tallinn x Python CodeClub   27 November 2024">
+  <title>Python dataframes with pandas and polars</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+  
+  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Python dataframes with pandas and polars</h1>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Andreas Beger and Isaac Chung <br> PyData Tallinn x Python CodeClub <br> 27 November 2024 
+</div>
+</div>
+</div>
+
+</section>
+<section id="bios" class="slide level2">
+<h2>Bios</h2>
+<div class="columns">
+<div class="column" style="width:47%;">
+<p><strong>Andreas Beger</strong></p>
+<ul>
+<li class="fragment">🏢 Data Scientist, Consult.</li>
+<li class="fragment">🏃‍♂️🐌 Slow marathoner</li>
+<li class="fragment">📍 🇩🇪/🇭🇷 → 🇺🇸 → 🇪🇪</li>
+<li class="fragment">🎓 PhD Political Science</li>
+</ul>
+</div><div class="column" style="width:53%;">
+<p><strong>Isaac Chung</strong></p>
+<ul>
+<li class="fragment">🏢 Staff Data Scientist, Wrike</li>
+<li class="fragment">🏊‍♂️🚴🏃‍♂️ Fast triathlete</li>
+<li class="fragment">📍 🇭🇰 → 🇨🇦 → 🇪🇪</li>
+<li class="fragment">🎓 MS Machine Learning</li>
+</ul>
+</div><div class="fragment">
+<hr>
+<p>🐍 We are also the PyData Tallinn co-organizers.</p>
+</div>
+</div>
+</section>
+<section id="getting-setup" class="slide level2">
+<h2>Getting setup</h2>
+<p>Instructions for how to follow along in notebooks…GitHub codespaces?</p>
+</section>
+<section>
+<section id="what-are-dataframes" class="title-slide slide level1 center">
+<h1>What are dataframes?</h1>
+
+</section>
+<section id="definition" class="slide level2">
+<h2>Definition</h2>
+<div class="columns v-center-container">
+<div class="column" style="width:60%;">
+<ul>
+<li class="fragment">Dataframes are a data type representing 2D tables</li>
+<li class="fragment">Where the columns have names</li>
+<li class="fragment">Unlike matrices or arrays, columns might have different data types</li>
+<li class="fragment">And the rows are identified by one or more ID variables</li>
+</ul>
+</div><div class="column" style="width:10%;">
+
+</div><div class="column fragment" style="width:30%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>x</th>
+<th>y</th>
+<th>group</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>2</td>
+<td>a</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>7</td>
+<td>b</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>8</td>
+<td>a</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>2</td>
+<td>b</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+</section>
+<section id="why" class="slide level2">
+<h2>Why?</h2>
+<div class="fragment">
+<p>Imagine working with tabular data if we didn’t have dataframes and associated methods.</p>
+<div class="fragment">
+<div id="94ed5304" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>by_rows <span class="op">=</span> [</span>
+<span id="cb1-2"><a></a>    {<span class="st">"x"</span>: <span class="dv">1</span>, <span class="st">"y"</span>: <span class="dv">2</span>, <span class="st">"group"</span>: <span class="st">"a"</span>},</span>
+<span id="cb1-3"><a></a>    {<span class="st">"x"</span>: <span class="dv">4</span>, <span class="st">"y"</span>: <span class="dv">7</span>, <span class="st">"group"</span>: <span class="st">"b"</span>},</span>
+<span id="cb1-4"><a></a>    {<span class="st">"x"</span>: <span class="dv">3</span>, <span class="st">"y"</span>: <span class="dv">8</span>, <span class="st">"group"</span>: <span class="st">"a"</span>},</span>
+<span id="cb1-5"><a></a>    {<span class="st">"x"</span>: <span class="dv">9</span>, <span class="st">"y"</span>: <span class="dv">2</span>, <span class="st">"group"</span>: <span class="st">"b"</span>}</span>
+<span id="cb1-6"><a></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p><br></p>
+<div class="fragment">
+<div id="91aac462" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>by_columns <span class="op">=</span> {</span>
+<span id="cb2-2"><a></a>    <span class="st">"x"</span>: [<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">9</span>],</span>
+<span id="cb2-3"><a></a>    <span class="st">"y"</span>: [<span class="dv">2</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">2</span>],</span>
+<span id="cb2-4"><a></a>    <span class="st">"group"</span>: [<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>]</span>
+<span id="cb2-5"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="common-dataframe-operations" class="slide level2">
+<h2>Common dataframe operations</h2>
+<div class="columns v-center-container">
+<div class="column" style="width:50%;">
+<ul>
+<li class="fragment">📖 ✍️ read and write</li>
+<li class="fragment">🔬 inspect</li>
+<li class="fragment">🛒 select columns</li>
+<li class="fragment">🔍 filter rows</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li class="fragment">🥪 mutate, add columns</li>
+<li class="fragment">👨‍👩‍👧‍👦 group and aggregate</li>
+<li class="fragment">🤝 join other dataframes</li>
+<li class="fragment">🧱 reshape wide, long</li>
+</ul>
+</div></div>
+</section>
+<section id="agenda" class="slide level2">
+<h2>Agenda</h2>
+<div>
+<ol type="1">
+<li class="fragment">Pandas
+<ul>
+<li class="fragment">Basic operations through group/aggregate</li>
+</ul></li>
+<li class="fragment">Polars
+<ul>
+<li class="fragment">Expressions</li>
+<li class="fragment">Joining dataframes and reshaping / pivoting</li>
+</ul></li>
+<li class="fragment">Big picture
+<ul>
+<li class="fragment">Pandas and Polars pros and cons</li>
+<li class="fragment">Some other frameworks</li>
+</ul></li>
+</ol>
+</div>
+</section>
+<section id="link-to-notebooks" class="slide level2">
+<h2>Link to notebooks</h2>
+
+<img data-src="media/dataframes-repo-qr-code.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
+<section>
+<section id="section-1-pandas" class="title-slide slide level1 center">
+<h1>Section 1: pandas</h1>
+
+<img data-src="media/pandas-logo.png" class="r-stretch"></section>
+<section id="history" class="slide level2">
+<h2>History</h2>
+<p>Wes McKinney</p>
+<ul>
+<li>2008</li>
+</ul>
+<p>originally built on top of numpy pandas 2 () adds support for arrow backend</p>
+</section>
+<section id="getting-started" class="slide level2 smaller">
+<h2>Getting started</h2>
+<div id="42962e80" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-3"><a></a></span>
+<span id="cb3-4"><a></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-5"><a></a>    <span class="st">"quarter"</span>: [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>],</span>
+<span id="cb3-6"><a></a>    <span class="st">"x"</span>: np.random.randn(<span class="dv">12</span>),</span>
+<span id="cb3-7"><a></a>    <span class="st">"date"</span>: pd.date_range(<span class="st">"2024-01-01"</span>, periods<span class="op">=</span><span class="dv">12</span>, freq<span class="op">=</span><span class="st">"MS"</span>)</span>
+<span id="cb3-8"><a></a>})</span>
+<span id="cb3-9"><a></a></span>
+<span id="cb3-10"><a></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">quarter</th>
+<th data-quarto-table-cell-role="th">x</th>
+<th data-quarto-table-cell-role="th">date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>1.068246</td>
+<td>2024-01-01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>-0.660666</td>
+<td>2024-02-01</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1</td>
+<td>-0.253664</td>
+<td>2024-03-01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2</td>
+<td>0.747306</td>
+<td>2024-04-01</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2</td>
+<td>-0.132748</td>
+<td>2024-05-01</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="components-of-a-dataframe" class="slide level2 smaller">
+<h2>Components of a dataframe</h2>
+<div class="fragment">
+<p>Series</p>
+<div id="048198ee" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>df.x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>0     1.068246
+1    -0.660666
+2    -0.253664
+3     0.747306
+4    -0.132748
+5     1.312574
+6    -1.196567
+7     0.182457
+8     0.768476
+9     2.005653
+10   -0.087735
+11    0.301944
+Name: x, dtype: float64</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Columns</p>
+<div id="b01af0ad" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>df.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>Index(['quarter', 'x', 'date'], dtype='object')</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Index</p>
+<div id="9caa94f0" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>df.index</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>RangeIndex(start=0, stop=12, step=1)</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="input---reading-data" class="slide level2 smaller">
+<h2>Input - reading data</h2>
+<div id="8ac6aa5b" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>accidents <span class="op">=</span> pd.read_csv(<span class="st">"data/estonia-traffic-accidents-clean.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="inspecting" class="slide level2 smaller">
+<h2>Inspecting</h2>
+<div class="fragment">
+<div id="e5cebe6e" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>accidents.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>(14259, 8)</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div id="04f1ce6c" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>accidents.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>Index(['date', 'persons_involved', 'killed', 'injured', 'county',
+       'pedestrian_involved', 'accident_type', 'light_conditions'],
+      dtype='object')</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div id="1bb5c3f3" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>accidents.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="3d49b460" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="11">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">persons_involved</th>
+<th data-quarto-table-cell-role="th">killed</th>
+<th data-quarto-table-cell-role="th">injured</th>
+<th data-quarto-table-cell-role="th">county</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2014-10-24 08:45:00</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>Harju maakond</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2014-10-24 13:45:00</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>Harju maakond</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2014-08-11 00:00:00</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>Harju maakond</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2014-11-17 17:32:00</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>Harju maakond</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2015-04-28 07:55:00</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>Harju maakond</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="inspecting-1" class="slide level2 smaller">
+<h2>Inspecting</h2>
+<div id="207e784c" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>accidents.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 14259 entries, 0 to 14258
+Data columns (total 8 columns):
+ #   Column               Non-Null Count  Dtype 
+---  ------               --------------  ----- 
+ 0   date                 14259 non-null  object
+ 1   persons_involved     14259 non-null  int64 
+ 2   killed               14259 non-null  int64 
+ 3   injured              14259 non-null  int64 
+ 4   county               14259 non-null  object
+ 5   pedestrian_involved  14259 non-null  int64 
+ 6   accident_type        14259 non-null  object
+ 7   light_conditions     14259 non-null  object
+dtypes: int64(4), object(4)
+memory usage: 891.3+ KB</code></pre>
+</div>
+</div>
+</section>
+<section id="selecting-columns" class="slide level2 smaller">
+<h2>Selecting columns</h2>
+<p>Different ways, one is indexing with <code>[]</code>:</p>
+<div id="d5fa6a53" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a>accidents[<span class="st">"date"</span>].head(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>0    2014-10-24 08:45:00
+1    2014-10-24 13:45:00
+2    2014-08-11 00:00:00
+3    2014-11-17 17:32:00
+Name: date, dtype: object</code></pre>
+</div>
+</div>
+<p>Multiple columns</p>
+<div id="ca48ba7a" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a>accidents[[<span class="st">"date"</span>, <span class="st">"county"</span>]].head(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">county</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2014-10-24 08:45:00</td>
+<td>Harju maakond</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2014-10-24 13:45:00</td>
+<td>Harju maakond</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2014-08-11 00:00:00</td>
+<td>Harju maakond</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2014-11-17 17:32:00</td>
+<td>Harju maakond</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="mutating-columns" class="slide level2 smaller">
+<h2>Mutating columns</h2>
+<p>Right now date is stored as a string:</p>
+<div id="833b74ed" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>accidents[<span class="st">"date"</span>][<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>'2014-10-24 08:45:00'</code></pre>
+</div>
+</div>
+<div id="5816c646" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a><span class="bu">type</span>(accidents[<span class="st">"date"</span>][<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>str</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p><br></p>
+<p>Convert it to proper data type:</p>
+<div id="7ce69486" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a></a>accidents[<span class="st">"date"</span>] <span class="op">=</span> pd.to_datetime(accidents[<span class="st">"date"</span>])</span>
+<span id="cb25-2"><a></a><span class="bu">type</span>(accidents[<span class="st">"date"</span>][<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>pandas._libs.tslibs.timestamps.Timestamp</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="sidebar-pandas-series" class="slide level2 smaller">
+<h2>Sidebar: Pandas Series</h2>
+<div id="cac2159b" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a></a>dates <span class="op">=</span> accidents[<span class="st">"date"</span>]</span>
+<span id="cb27-2"><a></a><span class="bu">type</span>(dates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>pandas.core.series.Series</code></pre>
+</div>
+</div>
+<p><br></p>
+<div class="fragment">
+<div id="62895fba" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a>start <span class="op">=</span> accidents[<span class="st">"date"</span>].<span class="bu">min</span>()</span>
+<span id="cb29-2"><a></a>end <span class="op">=</span> accidents[<span class="st">"date"</span>].<span class="bu">max</span>()</span>
+<span id="cb29-3"><a></a><span class="bu">print</span>(<span class="ss">f"First accident: </span><span class="sc">{</span>start<span class="sc">}</span><span class="ch">\n</span><span class="ss">Last accident: </span><span class="sc">{</span>end<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>First accident: 2011-01-05 00:00:00
+Last accident: 2021-12-31 23:45:00</code></pre>
+</div>
+</div>
+<p><br></p>
+</div>
+<div class="fragment">
+<div id="2c088d9d" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a>accidents[<span class="st">"accident_type"</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>accident_type
+Kokkupõrge            5605
+Ühesõidukiõnnetus     3946
+Jalakäijaõnnetus      3386
+Muu liiklusõnnetus    1262
+Teadmata                60
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="filtering-rows" class="slide level2 smaller">
+<h2>Filtering rows</h2>
+<div id="5a9c7034" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a></a>accidents[accidents[<span class="st">"county"</span>] <span class="op">==</span> <span class="st">"Harju maakond"</span>].shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>(7000, 8)</code></pre>
+</div>
+</div>
+<p><br></p>
+<div class="fragment">
+<div id="6918c0c5" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a></a>accidents[<span class="st">"county"</span>] <span class="op">==</span> <span class="st">"Harju maakond"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>0         True
+1         True
+2         True
+3         True
+4         True
+         ...  
+14254    False
+14255    False
+14256     True
+14257    False
+14258    False
+Name: county, Length: 14259, dtype: bool</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="mutating-dataframes" class="slide level2 smaller">
+<h2>Mutating dataframes</h2>
+<div id="31a1e3de" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a></a>accidents[<span class="st">"killed_or_injured"</span>] <span class="op">=</span> accidents[<span class="st">"killed"</span>] <span class="op">+</span> accidents[<span class="st">"injured"</span>]</span>
+<span id="cb37-2"><a></a>accidents[[<span class="st">'killed'</span>, <span class="st">'injured'</span>, <span class="st">'killed_or_injured'</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">killed</th>
+<th data-quarto-table-cell-role="th">injured</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p><br></p>
+<div id="540010ed" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a></a>accidents[<span class="st">"killed_or_injured"</span>].<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>np.int64(18021)</code></pre>
+</div>
+</div>
+</section>
+<section id="grouping-and-summarizing" class="slide level2 smaller">
+<h2>Grouping and summarizing</h2>
+<p>How many people were harmed, by accident type?</p>
+<div class="fragment">
+<div id="20a79c7b" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a></a>by_type <span class="op">=</span> accidents.groupby(<span class="st">"accident_type"</span>).agg({<span class="st">"killed_or_injured"</span>: <span class="st">"sum"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<div id="a738dc0f" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a></a>by_type</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">accident_type</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Jalakäijaõnnetus</td>
+<td>3548</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kokkupõrge</td>
+<td>7951</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Muu liiklusõnnetus</td>
+<td>1436</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Teadmata</td>
+<td>70</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Ühesõidukiõnnetus</td>
+<td>5016</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="pandas-is-great" class="slide level2">
+<h2>pandas is great</h2>
+<div class="fragment">
+<p><br> 2017, Wes McKinney (creator of pandas):</p>
+</div>
+<div class="fragment">
+<blockquote>
+<p><strong>10 Things I Hate About Pandas </strong></p>
+</blockquote>
+</div>
+<div class="fragment">
+<ul>
+<li>Inefficient memory management, need 5-10x data size</li>
+<li>Eager evaluation → limited query planning</li>
+<li>No multi-core</li>
+</ul>
+
+</div>
+<aside><div>
+<p><a href="https://wesmckinney.com/blog/apache-arrow-pandas-internals/">https://wesmckinney.com/blog/apache-arrow-pandas-internals/</a></p>
+</div></aside></section></section>
+<section>
+<section id="section-2-polars" class="title-slide slide level1 center">
+<h1>Section 2: polars</h1>
+
+<img data-src="media/polars-logo.jpg" class="r-stretch"></section>
+<section id="history-1" class="slide level2">
+<h2>History</h2>
+<p>2020 Ritchie Vink</p>
+<p>Uses arrow as internal representation</p>
+<p>(Created by Wes McKinney in 2016!)</p>
+</section>
+<section id="new-slides" class="slide level2">
+<h2>new slides</h2>
+<ul>
+<li>Out with indices</li>
+<li>Out with <code>.loc</code>, <code>.iloc</code></li>
+<li>Out with <code>[</code></li>
+<li>In with lazy evaluation</li>
+<li>Expressions</li>
+</ul>
+</section>
+<section id="getting-started-1" class="slide level2 smaller">
+<h2>Getting started</h2>
+<div id="3130ae50" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb42-2"><a></a></span>
+<span id="cb42-3"><a></a>accidents <span class="op">=</span> pl.read_csv(<span class="st">"data/estonia-traffic-accidents-clean.csv"</span>)</span>
+<span id="cb42-4"><a></a>accidents.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div id="30212d98" class="cell" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="27">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 5)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">persons_involved</th>
+<th data-quarto-table-cell-role="th">killed</th>
+<th data-quarto-table-cell-role="th">injured</th>
+<th data-quarto-table-cell-role="th">county</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>i64</th>
+<th>i64</th>
+<th>i64</th>
+<th>str</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"2014-10-24&nbsp;08:45:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="even">
+<td>"2014-10-24&nbsp;13:45:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="odd">
+<td>"2014-08-11&nbsp;00:00:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="even">
+<td>"2014-11-17&nbsp;17:32:00"</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="odd">
+<td>"2015-04-28&nbsp;07:55:00"</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="easy-to-convert-between-the-two" class="slide level2">
+<h2>Easy to convert between the two</h2>
+<div class="sourceCode" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a></a>df <span class="op">=</span> df.to_pandas()</span>
+<span id="cb43-2"><a></a>df <span class="op">=</span> pl.from_pandas(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="selecting-columns-1" class="slide level2 smaller">
+<h2>Selecting columns</h2>
+<div id="63b4b126" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a></a>accidents.select(<span class="st">"date"</span>, <span class="st">"county"</span>).head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 2)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">county</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>str</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"2014-10-24&nbsp;08:45:00"</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="even">
+<td>"2014-10-24&nbsp;13:45:00"</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="odd">
+<td>"2014-08-11&nbsp;00:00:00"</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="even">
+<td>"2014-11-17&nbsp;17:32:00"</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+<tr class="odd">
+<td>"2015-04-28&nbsp;07:55:00"</td>
+<td>"Harju&nbsp;maakond"</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="expressions" class="slide level2 smaller">
+<h2>Expressions</h2>
+<p>Expressions are abstract, composable <strong>data transformations</strong> that are executed with a <strong>context</strong> that provides data.</p>
+<div id="fc36eb69" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a></a>accidents.select(pl.col(<span class="st">"date"</span>)).head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 1)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">date</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"2014-10-24&nbsp;08:45:00"</td>
+</tr>
+<tr class="even">
+<td>"2014-10-24&nbsp;13:45:00"</td>
+</tr>
+<tr class="odd">
+<td>"2014-08-11&nbsp;00:00:00"</td>
+</tr>
+<tr class="even">
+<td>"2014-11-17&nbsp;17:32:00"</td>
+</tr>
+<tr class="odd">
+<td>"2015-04-28&nbsp;07:55:00"</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="they-can-be-composed" class="slide level2 smaller">
+<h2>They can be composed</h2>
+<p>What the biggest accident, in terms of killed or injured?</p>
+<div class="fragment">
+<div id="2604864f" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a></a>accidents.select(</span>
+<span id="cb46-2"><a></a>    <span class="co"># select 'killed'</span></span>
+<span id="cb46-3"><a></a>    pl.col(<span class="st">"killed"</span>)</span>
+<span id="cb46-4"><a></a>    <span class="co"># add 'injured'</span></span>
+<span id="cb46-5"><a></a>    .add(pl.col(<span class="st">"injured"</span>))</span>
+<span id="cb46-6"><a></a>    <span class="co"># give the result a new column name</span></span>
+<span id="cb46-7"><a></a>    .alias(<span class="st">"killed_or_injured"</span>)</span>
+<span id="cb46-8"><a></a>    <span class="co"># identify the max value</span></span>
+<span id="cb46-9"><a></a>    .<span class="bu">max</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (1, 1)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+</tr>
+<tr class="odd">
+<th>i64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>23</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="and-they-work-in-multiple-contexts" class="slide level2">
+<h2>And they work in multiple contexts</h2>
+<ul>
+<li><code>select()</code></li>
+<li><code>filter()</code></li>
+<li><code>with_columns()</code>: mutating dataframes</li>
+<li><code>group_by()</code> and aggregations</li>
+</ul>
+</section>
+<section id="filtering-rows-1" class="slide level2">
+<h2>Filtering rows</h2>
+<p>How many accidents were in Harju county?</p>
+<div id="6cfe4486" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a></a>accidents.<span class="bu">filter</span>(pl.col(<span class="st">"county"</span>).eq(<span class="st">"Harju maakond"</span>)).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>(7000, 8)</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div id="d179480d" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a></a>accidents.<span class="bu">filter</span>(pl.col(<span class="st">"county"</span>).<span class="bu">str</span>.contains(<span class="st">"Harju"</span>)).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<pre><code>(7000, 8)</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="mutating-dataframes-1" class="slide level2 smaller">
+<h2>Mutating dataframes</h2>
+<p><code>with_columns()</code> + expressions</p>
+<div class="fragment">
+<div id="66d9634a" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a></a>accidents <span class="op">=</span> accidents.with_columns(</span>
+<span id="cb51-2"><a></a>    pl.col(<span class="st">"killed"</span>).add(pl.col(<span class="st">"injured"</span>)).alias(<span class="st">"killed_or_injured"</span>),</span>
+<span id="cb51-3"><a></a>    pl.col(<span class="st">"killed"</span>).add(pl.col(<span class="st">"injured"</span>)).truediv(pl.col(<span class="st">"persons_involved"</span>)).alias(<span class="st">"harmed_rate"</span>)</span>
+<span id="cb51-4"><a></a>)</span>
+<span id="cb51-5"><a></a>accidents.select([<span class="st">"date"</span>, <span class="st">"persons_involved"</span>, <span class="st">"killed_or_injured"</span>, <span class="st">"harmed_rate"</span>]).head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 4)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">persons_involved</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+<th data-quarto-table-cell-role="th">harmed_rate</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>i64</th>
+<th>i64</th>
+<th>f64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"2014-10-24&nbsp;08:45:00"</td>
+<td>2</td>
+<td>1</td>
+<td>0.5</td>
+</tr>
+<tr class="even">
+<td>"2014-10-24&nbsp;13:45:00"</td>
+<td>2</td>
+<td>1</td>
+<td>0.5</td>
+</tr>
+<tr class="odd">
+<td>"2014-08-11&nbsp;00:00:00"</td>
+<td>2</td>
+<td>1</td>
+<td>0.5</td>
+</tr>
+<tr class="even">
+<td>"2014-11-17&nbsp;17:32:00"</td>
+<td>2</td>
+<td>2</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td>"2015-04-28&nbsp;07:55:00"</td>
+<td>2</td>
+<td>1</td>
+<td>0.5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="group-and-summarizeaggregate" class="slide level2 smaller">
+<h2>Group and summarize/aggregate</h2>
+<p><code>group_by()</code> + <code>agg()</code> or <code>with_columns()</code></p>
+<div class="fragment">
+<div id="52cc5507" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a></a>by_county <span class="op">=</span> (accidents</span>
+<span id="cb52-2"><a></a>             .group_by(<span class="st">"county"</span>)</span>
+<span id="cb52-3"><a></a>             .agg(pl.col(<span class="st">"killed_or_injured"</span>).<span class="bu">sum</span>())</span>
+<span id="cb52-4"><a></a>             .sort(<span class="st">"killed_or_injured"</span>, descending<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb52-5"><a></a>)</span>
+<span id="cb52-6"><a></a>by_county.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 2)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>i64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"Harju&nbsp;maakond"</td>
+<td>8423</td>
+</tr>
+<tr class="even">
+<td>"Tartu&nbsp;maakond"</td>
+<td>1968</td>
+</tr>
+<tr class="odd">
+<td>"Ida-Viru&nbsp;maakond"</td>
+<td>1348</td>
+</tr>
+<tr class="even">
+<td>"Pärnu&nbsp;maakond"</td>
+<td>1293</td>
+</tr>
+<tr class="odd">
+<td>"Lääne-Viru&nbsp;maakond"</td>
+<td>883</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="optional-joining-dataframes" class="slide level2 smaller">
+<h2>(Optional) Joining dataframes</h2>
+<p>What’s the per capita accident victim rate?</p>
+<div class="fragment">
+<div id="ff5b4b19" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a></a>county_pop <span class="op">=</span> (pl.read_csv(<span class="st">"data/county-pop.csv"</span>, skip_rows<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb53-2"><a></a>              .rename({<span class="st">"County"</span>: <span class="st">"county"</span>, <span class="st">"Age groups total"</span>: <span class="st">"population"</span>})</span>
+<span id="cb53-3"><a></a>              .select([<span class="st">"county"</span>, <span class="st">"population"</span>])</span>
+<span id="cb53-4"><a></a>              <span class="co"># this has "county" in the county names, not "maakond"</span></span>
+<span id="cb53-5"><a></a>              .with_columns(pl.col(<span class="st">"county"</span>).<span class="bu">str</span>.replace(<span class="st">"county"</span>, <span class="st">"maakond"</span>))</span>
+<span id="cb53-6"><a></a>              )</span>
+<span id="cb53-7"><a></a></span>
+<span id="cb53-8"><a></a>by_county_w_pop <span class="op">=</span> by_county.join(county_pop, on<span class="op">=</span><span class="st">"county"</span>, how<span class="op">=</span><span class="st">"left"</span>)</span>
+<span id="cb53-9"><a></a>by_county_w_pop.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (3, 3)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+<th data-quarto-table-cell-role="th">population</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>i64</th>
+<th>i64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"Harju&nbsp;maakond"</td>
+<td>8423</td>
+<td>598059</td>
+</tr>
+<tr class="even">
+<td>"Tartu&nbsp;maakond"</td>
+<td>1968</td>
+<td>152977</td>
+</tr>
+<tr class="odd">
+<td>"Ida-Viru&nbsp;maakond"</td>
+<td>1348</td>
+<td>136240</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="optional-joining-dataframes-1" class="slide level2 smaller">
+<h2>(Optional) Joining dataframes</h2>
+<p>Now we can use some simple select + expressions do to the math:</p>
+<div class="fragment">
+<div id="30506a35" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a></a>by_county_w_pop.select(</span>
+<span id="cb54-2"><a></a>    pl.col(<span class="st">"county"</span>), </span>
+<span id="cb54-3"><a></a>    pl.col(<span class="st">"killed_or_injured"</span>),</span>
+<span id="cb54-4"><a></a>    pl.col(<span class="st">"killed_or_injured"</span>).truediv(pl.col(<span class="st">"population"</span>)).mul(<span class="dv">1000</span>).alias(<span class="st">"rate/1000"</span>)</span>
+<span id="cb54-5"><a></a>    ).head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (3, 3)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">killed_or_injured</th>
+<th data-quarto-table-cell-role="th">rate/1000</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>i64</th>
+<th>f64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"Harju&nbsp;maakond"</td>
+<td>8423</td>
+<td>14.083895</td>
+</tr>
+<tr class="even">
+<td>"Tartu&nbsp;maakond"</td>
+<td>1968</td>
+<td>12.864679</td>
+</tr>
+<tr class="odd">
+<td>"Ida-Viru&nbsp;maakond"</td>
+<td>1348</td>
+<td>9.894304</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="optional-reshaping-pivoting-dataframes" class="slide level2 smaller">
+<h2>(Optional) Reshaping / pivoting dataframes</h2>
+<p>We’re going to use a different dataset on reflector usage for this.</p>
+<div class="fragment">
+<div id="8bed854d" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a></a>reflectors <span class="op">=</span> (pl.read_csv(<span class="st">"data/reflectors.csv"</span>, has_header<span class="op">=</span><span class="va">True</span>, separator<span class="op">=</span><span class="st">";"</span>, skip_rows<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb55-2"><a></a>              .<span class="bu">filter</span>(pl.col(<span class="st">"Sex"</span>).ne(<span class="st">"Men and women"</span>))</span>
+<span id="cb55-3"><a></a>              .drop([<span class="st">"Type of data"</span>, <span class="st">"Year"</span>, <span class="st">"All age groups (16-64)"</span>])</span>
+<span id="cb55-4"><a></a>)</span>
+<span id="cb55-5"><a></a>reflectors.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 7)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">Reflector use</th>
+<th data-quarto-table-cell-role="th">Sex</th>
+<th data-quarto-table-cell-role="th">16-24</th>
+<th data-quarto-table-cell-role="th">25-34</th>
+<th data-quarto-table-cell-role="th">35-44</th>
+<th data-quarto-table-cell-role="th">45-54</th>
+<th data-quarto-table-cell-role="th">55-64</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>str</th>
+<th>f64</th>
+<th>f64</th>
+<th>f64</th>
+<th>f64</th>
+<th>f64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"Never"</td>
+<td>"Men"</td>
+<td>14.3</td>
+<td>12.4</td>
+<td>7.2</td>
+<td>3.9</td>
+<td>2.7</td>
+</tr>
+<tr class="even">
+<td>"Never"</td>
+<td>"Women"</td>
+<td>8.8</td>
+<td>5.0</td>
+<td>4.6</td>
+<td>2.0</td>
+<td>2.5</td>
+</tr>
+<tr class="odd">
+<td>"Sometimes"</td>
+<td>"Men"</td>
+<td>46.7</td>
+<td>36.2</td>
+<td>30.9</td>
+<td>26.1</td>
+<td>28.7</td>
+</tr>
+<tr class="even">
+<td>"Sometimes"</td>
+<td>"Women"</td>
+<td>29.6</td>
+<td>26.0</td>
+<td>20.6</td>
+<td>14.8</td>
+<td>13.7</td>
+</tr>
+<tr class="odd">
+<td>"Nearly&nbsp;always"</td>
+<td>"Men"</td>
+<td>34.3</td>
+<td>40.5</td>
+<td>52.2</td>
+<td>58.6</td>
+<td>55.9</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="optional-reshaping-pivoting-dataframes-1" class="slide level2 smaller">
+<h2>(Optional) Reshaping / pivoting dataframes</h2>
+<div id="35a102af" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a></a>reflectors <span class="op">=</span> (reflectors</span>
+<span id="cb56-2"><a></a>              .unpivot(index<span class="op">=</span>[<span class="st">"Reflector use"</span>, <span class="st">"Sex"</span>], </span>
+<span id="cb56-3"><a></a>                       variable_name<span class="op">=</span><span class="st">"age_group"</span>, </span>
+<span id="cb56-4"><a></a>                       value_name<span class="op">=</span><span class="st">"percentage"</span>)</span>
+<span id="cb56-5"><a></a>)</span>
+<span id="cb56-6"><a></a>reflectors.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 4)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">Reflector use</th>
+<th data-quarto-table-cell-role="th">Sex</th>
+<th data-quarto-table-cell-role="th">age_group</th>
+<th data-quarto-table-cell-role="th">percentage</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>str</th>
+<th>str</th>
+<th>f64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"Never"</td>
+<td>"Men"</td>
+<td>"16-24"</td>
+<td>14.3</td>
+</tr>
+<tr class="even">
+<td>"Never"</td>
+<td>"Women"</td>
+<td>"16-24"</td>
+<td>8.8</td>
+</tr>
+<tr class="odd">
+<td>"Sometimes"</td>
+<td>"Men"</td>
+<td>"16-24"</td>
+<td>46.7</td>
+</tr>
+<tr class="even">
+<td>"Sometimes"</td>
+<td>"Women"</td>
+<td>"16-24"</td>
+<td>29.6</td>
+</tr>
+<tr class="odd">
+<td>"Nearly&nbsp;always"</td>
+<td>"Men"</td>
+<td>"16-24"</td>
+<td>34.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-reflector-use-by-age-and-gender" class="slide level2 smaller">
+<h2>Plot reflector use by age and gender</h2>
+<div id="e8c2e809" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a></a>(reflectors</span>
+<span id="cb57-2"><a></a> .<span class="bu">filter</span>(pl.col(<span class="st">"Reflector use"</span>).eq(<span class="st">"Never"</span>))</span>
+<span id="cb57-3"><a></a> .plot.line(x <span class="op">=</span> <span class="st">"age_group"</span>, y <span class="op">=</span> <span class="st">"percentage"</span>, color <span class="op">=</span> <span class="st">"Sex"</span>)</span>
+<span id="cb57-4"><a></a> .properties(width<span class="op">=</span><span class="dv">700</span>, height<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb57-5"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+
+<style>
+  #altair-viz-e747242a026b465bba1f9d090cd3fe65.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-e747242a026b465bba1f9d090cd3fe65.vega-embed details,
+  #altair-viz-e747242a026b465bba1f9d090cd3fe65.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-e747242a026b465bba1f9d090cd3fe65"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-e747242a026b465bba1f9d090cd3fe65") {
+      outputDiv = document.getElementById("altair-viz-e747242a026b465bba1f9d090cd3fe65");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-70ba5e9649ef105c097b9c80302ecebf"}, "mark": {"type": "line", "tooltip": true}, "encoding": {"color": {"field": "Sex", "type": "nominal"}, "x": {"field": "age_group", "type": "nominal"}, "y": {"field": "percentage", "type": "quantitative"}}, "height": 300, "params": [{"name": "param_1", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "width": 700, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-70ba5e9649ef105c097b9c80302ecebf": [{"Reflector use": "Never", "Sex": "Men", "age_group": "16-24", "percentage": 14.3}, {"Reflector use": "Never", "Sex": "Women", "age_group": "16-24", "percentage": 8.8}, {"Reflector use": "Never", "Sex": "Men", "age_group": "25-34", "percentage": 12.4}, {"Reflector use": "Never", "Sex": "Women", "age_group": "25-34", "percentage": 5.0}, {"Reflector use": "Never", "Sex": "Men", "age_group": "35-44", "percentage": 7.2}, {"Reflector use": "Never", "Sex": "Women", "age_group": "35-44", "percentage": 4.6}, {"Reflector use": "Never", "Sex": "Men", "age_group": "45-54", "percentage": 3.9}, {"Reflector use": "Never", "Sex": "Women", "age_group": "45-54", "percentage": 2.0}, {"Reflector use": "Never", "Sex": "Men", "age_group": "55-64", "percentage": 2.7}, {"Reflector use": "Never", "Sex": "Women", "age_group": "55-64", "percentage": 2.5}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+</section>
+<section id="modified-plot" class="slide level2 smaller">
+<h2>Modified plot</h2>
+<p>One category is “Never walk on dark streets, roads”…🧐</p>
+<div class="fragment">
+<div id="84f65722" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a></a>(reflectors</span>
+<span id="cb58-2"><a></a> .with_columns(pl.col(<span class="st">"Reflector use"</span>).<span class="bu">str</span>.replace(<span class="st">"Never walk on dark streets, roads"</span>, <span class="st">"Never"</span>))</span>
+<span id="cb58-3"><a></a> .group_by([<span class="st">"Reflector use"</span>, <span class="st">"Sex"</span>, <span class="st">"age_group"</span>])</span>
+<span id="cb58-4"><a></a> .agg(pl.col(<span class="st">"percentage"</span>).<span class="bu">sum</span>())</span>
+<span id="cb58-5"><a></a> .<span class="bu">filter</span>(pl.col(<span class="st">"Reflector use"</span>).eq(<span class="st">"Never"</span>))</span>
+<span id="cb58-6"><a></a> .sort([<span class="st">"age_group"</span>, <span class="st">"Sex"</span>])</span>
+<span id="cb58-7"><a></a> .plot.line(x <span class="op">=</span> <span class="st">"age_group"</span>, y <span class="op">=</span> <span class="st">"percentage"</span>, color <span class="op">=</span> <span class="st">"Sex"</span>)</span>
+<span id="cb58-8"><a></a> .properties(width<span class="op">=</span><span class="dv">700</span>, height<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb58-9"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+
+<style>
+  #altair-viz-166a05e1f83e4b1bac9c5a1a29e5b86f.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-166a05e1f83e4b1bac9c5a1a29e5b86f.vega-embed details,
+  #altair-viz-166a05e1f83e4b1bac9c5a1a29e5b86f.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-166a05e1f83e4b1bac9c5a1a29e5b86f"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-166a05e1f83e4b1bac9c5a1a29e5b86f") {
+      outputDiv = document.getElementById("altair-viz-166a05e1f83e4b1bac9c5a1a29e5b86f");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-27e5d22aab58dfda62b4b83959d4e130"}, "mark": {"type": "line", "tooltip": true}, "encoding": {"color": {"field": "Sex", "type": "nominal"}, "x": {"field": "age_group", "type": "nominal"}, "y": {"field": "percentage", "type": "quantitative"}}, "height": 300, "params": [{"name": "param_2", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "width": 700, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-27e5d22aab58dfda62b4b83959d4e130": [{"Reflector use": "Never", "Sex": "Men", "age_group": "16-24", "percentage": 19.1}, {"Reflector use": "Never", "Sex": "Women", "age_group": "16-24", "percentage": 12.0}, {"Reflector use": "Never", "Sex": "Men", "age_group": "25-34", "percentage": 23.200000000000003}, {"Reflector use": "Never", "Sex": "Women", "age_group": "25-34", "percentage": 9.1}, {"Reflector use": "Never", "Sex": "Men", "age_group": "35-44", "percentage": 16.9}, {"Reflector use": "Never", "Sex": "Women", "age_group": "35-44", "percentage": 8.0}, {"Reflector use": "Never", "Sex": "Men", "age_group": "45-54", "percentage": 15.200000000000001}, {"Reflector use": "Never", "Sex": "Women", "age_group": "45-54", "percentage": 6.9}, {"Reflector use": "Never", "Sex": "Men", "age_group": "55-64", "percentage": 15.5}, {"Reflector use": "Never", "Sex": "Women", "age_group": "55-64", "percentage": 11.4}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+</div>
+</section>
+<section id="why-you-should-plot-your-data" class="slide level2 smaller">
+<h2>Why you should plot your data 😼</h2>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<div id="cf979c7d" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a></a>df1 <span class="op">=</span> pl.read_csv(<span class="st">"data/dataset1.csv"</span>)</span>
+<span id="cb59-2"><a></a>df1.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="41">
+<pre><code>(142, 2)</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div id="d735f4d7" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a></a>stats <span class="op">=</span> [<span class="st">"mean"</span>, <span class="st">"std"</span>, <span class="st">"25%"</span>, <span class="st">"75%"</span>]</span>
+<span id="cb61-2"><a></a>(df1</span>
+<span id="cb61-3"><a></a> .describe()</span>
+<span id="cb61-4"><a></a> .<span class="bu">filter</span>(pl.col(<span class="st">"statistic"</span>).is_in(stats))</span>
+<span id="cb61-5"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="42">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (4, 3)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">statistic</th>
+<th data-quarto-table-cell-role="th">x</th>
+<th data-quarto-table-cell-role="th">y</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>f64</th>
+<th>f64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"mean"</td>
+<td>54.2661</td>
+<td>47.834721</td>
+</tr>
+<tr class="even">
+<td>"std"</td>
+<td>16.769825</td>
+<td>26.939743</td>
+</tr>
+<tr class="odd">
+<td>"25%"</td>
+<td>39.706326</td>
+<td>24.46783</td>
+</tr>
+<tr class="even">
+<td>"75%"</td>
+<td>69.359559</td>
+<td>71.806616</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<div id="0d4fcbf7" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a></a>df2 <span class="op">=</span> pl.read_csv(<span class="st">"data/dataset2.csv"</span>)</span>
+<span id="cb62-2"><a></a>df2.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="43">
+<pre><code>(142, 2)</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div id="f808eafc" class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a></a>stats <span class="op">=</span> [<span class="st">"mean"</span>, <span class="st">"std"</span>, <span class="st">"25%"</span>, <span class="st">"75%"</span>]</span>
+<span id="cb64-2"><a></a>(df2</span>
+<span id="cb64-3"><a></a> .describe()</span>
+<span id="cb64-4"><a></a> .<span class="bu">filter</span>(pl.col(<span class="st">"statistic"</span>).is_in(stats))</span>
+<span id="cb64-5"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (4, 3)</small>
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">statistic</th>
+<th data-quarto-table-cell-role="th">x</th>
+<th data-quarto-table-cell-role="th">y</th>
+</tr>
+<tr class="odd">
+<th>str</th>
+<th>f64</th>
+<th>f64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"mean"</td>
+<td>54.263273</td>
+<td>47.832253</td>
+</tr>
+<tr class="even">
+<td>"std"</td>
+<td>16.765142</td>
+<td>26.935403</td>
+</tr>
+<tr class="odd">
+<td>"25%"</td>
+<td>44.1026</td>
+<td>25.2564</td>
+</tr>
+<tr class="even">
+<td>"75%"</td>
+<td>64.8718</td>
+<td>69.1026</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="why-you-should-plot-pt2" class="slide level2">
+<h2>Why you should plot pt2</h2>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<div id="a82d38f1" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a></a>df1.plot.point(<span class="st">"x"</span>, <span class="st">"y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="45">
+
+<style>
+  #altair-viz-7abab2e8050a4c63b18bb1e12f69ec2d.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-7abab2e8050a4c63b18bb1e12f69ec2d.vega-embed details,
+  #altair-viz-7abab2e8050a4c63b18bb1e12f69ec2d.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-7abab2e8050a4c63b18bb1e12f69ec2d"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-7abab2e8050a4c63b18bb1e12f69ec2d") {
+      outputDiv = document.getElementById("altair-viz-7abab2e8050a4c63b18bb1e12f69ec2d");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-78727878deffc03edc1c0ce70647bd8f"}, "mark": {"type": "point", "tooltip": true}, "encoding": {"x": {"field": "x", "type": "quantitative"}, "y": {"field": "y", "type": "quantitative"}}, "params": [{"name": "param_3", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-78727878deffc03edc1c0ce70647bd8f": [{"x": 32.3311102266, "y": 61.411101248}, {"x": 53.4214628807, "y": 26.1868803879}, {"x": 63.92020226, "y": 30.8321939163}, {"x": 70.2895057187, "y": 82.5336485877}, {"x": 34.1188302357, "y": 45.7345513203}, {"x": 67.6707164012, "y": 37.110947969}, {"x": 53.2591294055, "y": 97.4757710964}, {"x": 63.5149808671, "y": 25.1000785788}, {"x": 67.9805388133, "y": 80.9571652197}, {"x": 67.3724659005, "y": 29.720400203}, {"x": 15.5607495229, "y": 80.0656402858}, {"x": 71.7907676942, "y": 71.0654666627}, {"x": 70.2425464362, "y": 24.1095975542}, {"x": 64.9374355444, "y": 81.5542049945}, {"x": 62.2135245453, "y": 21.4758389969}, {"x": 67.2694004772, "y": 18.7089683725}, {"x": 40.5701970446, "y": 79.3729634752}, {"x": 74.7411813341, "y": 21.1016372041}, {"x": 71.7683189223, "y": 20.0110618423}, {"x": 76.1669198143, "y": 75.9361704048}, {"x": 65.6236574431, "y": 15.5828033531}, {"x": 50.8506336394, "y": 13.9876016304}, {"x": 33.0240700249, "y": 24.4678303872}, {"x": 39.7063261674, "y": 84.2752871038}, {"x": 45.5964849542, "y": 9.76334884943}, {"x": 42.9680469104, "y": 17.9454583961}, {"x": 52.4944067819, "y": 16.0511142003}, {"x": 46.0822757831, "y": 23.1104578154}, {"x": 74.2477082092, "y": 20.314187812}, {"x": 64.5682641863, "y": 83.6396338956}, {"x": 74.0216939058, "y": 76.1282745076}, {"x": 62.3911805626, "y": 5.62307076073}, {"x": 74.189036683, "y": 68.1335832223}, {"x": 28.2367819396, "y": 56.1395964513}, {"x": 75.7719387944, "y": 69.8292300322}, {"x": 75.8552294691, "y": 62.5170442862}, {"x": 65.9708570175, "y": 72.7448559954}, {"x": 21.7780404779, "y": 6.61662530728}, {"x": 67.7597962473, "y": 72.4212015285}, {"x": 78.6171953363, "y": 52.5752573142}, {"x": 68.5077081898, "y": 15.4569189652}, {"x": 74.8850211598, "y": 25.4166063231}, {"x": 66.4549036599, "y": 19.8366286542}, {"x": 77.3178020985, "y": 48.3983464352}, {"x": 58.9124603193, "y": 75.6677562173}, {"x": 57.617447817, "y": 8.19480060319}, {"x": 76.0882257967, "y": 59.6799300235}, {"x": 57.4660505497, "y": 1.50441817488}, {"x": 79.4283834934, "y": 45.2107942872}, {"x": 76.3565221496, "y": 10.4182411281}, {"x": 64.4050752632, "y": 78.5841760758}, {"x": 40.6350418091, "y": 73.3947503698}, {"x": 43.9498645857, "y": 75.9587156671}, {"x": 30.9962205791, "y": 71.694404938}, {"x": 68.2307689907, "y": 80.8725016628}, {"x": 72.0463894612, "y": 12.9180067349}, {"x": 46.5927679682, "y": 84.9723827774}, {"x": 49.2572183396, "y": 81.8814032306}, {"x": 42.7817612539, "y": 12.9911884302}, {"x": 65.475952195, "y": 14.2745856444}, {"x": 71.9650826544, "y": 17.7102359443}, {"x": 32.1464623358, "y": 43.4817094425}, {"x": 31.8384976954, "y": 71.8121653901}, {"x": 31.0052582572, "y": 40.682503007}, {"x": 80.4708943189, "y": 49.5021483467}, {"x": 71.9641671122, "y": 41.8742826668}, {"x": 78.0794214417, "y": 93.1333167652}, {"x": 41.6775957748, "y": 30.2012640846}, {"x": 65.953595185, "y": 31.1474060835}, {"x": 62.9344593731, "y": 31.9163906992}, {"x": 64.3737979844, "y": 28.8625834061}, {"x": 72.5093283599, "y": 39.5401302526}, {"x": 30.0522898741, "y": 96.6175423534}, {"x": 28.0033242354, "y": 46.6721919544}, {"x": 75.4012268619, "y": 88.6390766207}, {"x": 38.9800154218, "y": 87.322160691}, {"x": 65.2199135479, "y": 84.6829549336}, {"x": 73.0539899616, "y": 29.3808085571}, {"x": 34.3983616372, "y": 59.5444469033}, {"x": 43.4904501336, "y": 40.782542065}, {"x": 55.138737967, "y": 30.7257603575}, {"x": 43.6843934333, "y": 32.8230098696}, {"x": 35.9036097344, "y": 91.1118630801}, {"x": 45.3780188805, "y": 29.1692166544}, {"x": 39.7774828713, "y": 43.75581895}, {"x": 38.6644611569, "y": 33.3172384774}, {"x": 39.0440366877, "y": 84.6760108316}, {"x": 91.6399614428, "y": 79.4066030605}, {"x": 47.4881326771, "y": 85.3899333808}, {"x": 44.5902125769, "y": 22.0340116412}, {"x": 39.0896145478, "y": 70.4661940802}, {"x": 42.2293783752, "y": 19.9140684075}, {"x": 37.0003871448, "y": 60.264279248}, {"x": 39.0520864793, "y": 70.6525028457}, {"x": 37.4884147432, "y": 60.8144048511}, {"x": 69.3595594592, "y": 65.5213545959}, {"x": 43.542775926, "y": 62.4603112824}, {"x": 39.8112302539, "y": 65.3348328092}, {"x": 70.0689259404, "y": 7.59346560899}, {"x": 70.0405435824, "y": 77.1438066024}, {"x": 39.505789079, "y": 74.8516272173}, {"x": 62.5168908529, "y": 66.4847322418}, {"x": 72.1399254065, "y": 0.0151193251552}, {"x": 45.2515760666, "y": 70.0034213192}, {"x": 42.0633045627, "y": 2.33519661206}, {"x": 36.3556951539, "y": 6.0058486497}, {"x": 30.3918276596, "y": 42.75961287}, {"x": 36.4490038543, "y": 50.5462690659}, {"x": 40.467576002, "y": 60.0275120878}, {"x": 81.7246168002, "y": 6.03754484635}, {"x": 48.8231974964, "y": 76.6353305783}, {"x": 35.6205617651, "y": 57.2860155789}, {"x": 50.5839631148, "y": 71.8066161014}, {"x": 61.8564651063, "y": 71.7927431642}, {"x": 39.3237560262, "y": 59.3008196656}, {"x": 42.1856791429, "y": 66.0348978235}, {"x": 30.8469189898, "y": 37.3416401041}, {"x": 29.3462004281, "y": 42.1487418312}, {"x": 82.1105579783, "y": 1.21055166293}, {"x": 38.3020058088, "y": 60.0177857932}, {"x": 56.5841530218, "y": 70.512514809}, {"x": 33.3393742865, "y": 0.5091067352}, {"x": 78.7742390407, "y": 35.4841012146}, {"x": 27.9226442446, "y": 25.9868781844}, {"x": 71.6978651182, "y": 10.8681445111}, {"x": 74.1383313856, "y": 49.1739189791}, {"x": 32.579020066, "y": 1.80811559665}, {"x": 59.83218542, "y": 69.1525081443}, {"x": 35.0306285457, "y": 12.5366493416}, {"x": 74.3001198284, "y": 42.4770945921}, {"x": 63.2501970628, "y": 65.9524861966}, {"x": 34.1730737648, "y": 25.6936743092}, {"x": 40.9138319319, "y": 38.5590195509}, {"x": 62.8332930874, "y": 62.5108942269}, {"x": 42.4767923803, "y": 56.7312899691}, {"x": 52.0334562787, "y": 64.5666620298}, {"x": 48.9070429644, "y": 74.2877488252}, {"x": 59.8518383854, "y": 72.9583909677}, {"x": 48.9604602016, "y": 72.6295257275}, {"x": 46.8448551673, "y": 36.7917136918}, {"x": 39.9630215796, "y": 42.9449148487}, {"x": 66.704943997, "y": 32.0150954299}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<div id="a57168b0" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a></a>df2.plot.point(<span class="st">"x"</span>, <span class="st">"y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="46">
+
+<style>
+  #altair-viz-37b03777927b44b58d31510ea94f31cb.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-37b03777927b44b58d31510ea94f31cb.vega-embed details,
+  #altair-viz-37b03777927b44b58d31510ea94f31cb.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-37b03777927b44b58d31510ea94f31cb"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-37b03777927b44b58d31510ea94f31cb") {
+      outputDiv = document.getElementById("altair-viz-37b03777927b44b58d31510ea94f31cb");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-eb6365c37c0bb197a00403261ef439fc"}, "mark": {"type": "point", "tooltip": true}, "encoding": {"x": {"field": "x", "type": "quantitative"}, "y": {"field": "y", "type": "quantitative"}}, "params": [{"name": "param_4", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-eb6365c37c0bb197a00403261ef439fc": [{"x": 55.3846, "y": 97.1795}, {"x": 51.5385, "y": 96.0256}, {"x": 46.1538, "y": 94.4872}, {"x": 42.8205, "y": 91.4103}, {"x": 40.7692, "y": 88.3333}, {"x": 38.7179, "y": 84.8718}, {"x": 35.641, "y": 79.8718}, {"x": 33.0769, "y": 77.5641}, {"x": 28.9744, "y": 74.4872}, {"x": 26.1538, "y": 71.4103}, {"x": 23.0769, "y": 66.4103}, {"x": 22.3077, "y": 61.7949}, {"x": 22.3077, "y": 57.1795}, {"x": 23.3333, "y": 52.9487}, {"x": 25.8974, "y": 51.0256}, {"x": 29.4872, "y": 51.0256}, {"x": 32.8205, "y": 51.0256}, {"x": 35.3846, "y": 51.4103}, {"x": 40.2564, "y": 51.4103}, {"x": 44.1026, "y": 52.9487}, {"x": 46.6667, "y": 54.1026}, {"x": 50.0, "y": 55.2564}, {"x": 53.0769, "y": 55.641}, {"x": 56.6667, "y": 56.0256}, {"x": 59.2308, "y": 57.9487}, {"x": 61.2821, "y": 62.1795}, {"x": 61.5385, "y": 66.4103}, {"x": 61.7949, "y": 69.1026}, {"x": 57.4359, "y": 55.2564}, {"x": 54.8718, "y": 49.8718}, {"x": 52.5641, "y": 46.0256}, {"x": 48.2051, "y": 38.3333}, {"x": 49.4872, "y": 42.1795}, {"x": 51.0256, "y": 44.1026}, {"x": 45.3846, "y": 36.4103}, {"x": 42.8205, "y": 32.5641}, {"x": 38.7179, "y": 31.4103}, {"x": 35.1282, "y": 30.2564}, {"x": 32.5641, "y": 32.1795}, {"x": 30.0, "y": 36.7949}, {"x": 33.5897, "y": 41.4103}, {"x": 36.6667, "y": 45.641}, {"x": 38.2051, "y": 49.1026}, {"x": 29.7436, "y": 36.0256}, {"x": 29.7436, "y": 32.1795}, {"x": 30.0, "y": 29.1026}, {"x": 32.0513, "y": 26.7949}, {"x": 35.8974, "y": 25.2564}, {"x": 41.0256, "y": 25.2564}, {"x": 44.1026, "y": 25.641}, {"x": 47.1795, "y": 28.718}, {"x": 49.4872, "y": 31.4103}, {"x": 51.5385, "y": 34.8718}, {"x": 53.5897, "y": 37.5641}, {"x": 55.1282, "y": 40.641}, {"x": 56.6667, "y": 42.1795}, {"x": 59.2308, "y": 44.4872}, {"x": 62.3077, "y": 46.0256}, {"x": 64.8718, "y": 46.7949}, {"x": 67.9487, "y": 47.9487}, {"x": 70.5128, "y": 53.718}, {"x": 71.5385, "y": 60.641}, {"x": 71.5385, "y": 64.4872}, {"x": 69.4872, "y": 69.4872}, {"x": 46.9231, "y": 79.8718}, {"x": 48.2051, "y": 84.1026}, {"x": 50.0, "y": 85.2564}, {"x": 53.0769, "y": 85.2564}, {"x": 55.3846, "y": 86.0256}, {"x": 56.6667, "y": 86.0256}, {"x": 56.1538, "y": 82.9487}, {"x": 53.8462, "y": 80.641}, {"x": 51.2821, "y": 78.718}, {"x": 50.0, "y": 78.718}, {"x": 47.9487, "y": 77.5641}, {"x": 29.7436, "y": 59.8718}, {"x": 29.7436, "y": 62.1795}, {"x": 31.2821, "y": 62.5641}, {"x": 57.9487, "y": 99.4872}, {"x": 61.7949, "y": 99.1026}, {"x": 64.8718, "y": 97.5641}, {"x": 68.4615, "y": 94.1026}, {"x": 70.7692, "y": 91.0256}, {"x": 72.0513, "y": 86.4103}, {"x": 73.8462, "y": 83.3333}, {"x": 75.1282, "y": 79.1026}, {"x": 76.6667, "y": 75.2564}, {"x": 77.6923, "y": 71.4103}, {"x": 79.7436, "y": 66.7949}, {"x": 81.7949, "y": 60.2564}, {"x": 83.3333, "y": 55.2564}, {"x": 85.1282, "y": 51.4103}, {"x": 86.4103, "y": 47.5641}, {"x": 87.9487, "y": 46.0256}, {"x": 89.4872, "y": 42.5641}, {"x": 93.3333, "y": 39.8718}, {"x": 95.3846, "y": 36.7949}, {"x": 98.2051, "y": 33.718}, {"x": 56.6667, "y": 40.641}, {"x": 59.2308, "y": 38.3333}, {"x": 60.7692, "y": 33.718}, {"x": 63.0769, "y": 29.1026}, {"x": 64.1026, "y": 25.2564}, {"x": 64.359, "y": 24.1026}, {"x": 74.359, "y": 22.9487}, {"x": 71.2821, "y": 22.9487}, {"x": 67.9487, "y": 22.1795}, {"x": 65.8974, "y": 20.2564}, {"x": 63.0769, "y": 19.1026}, {"x": 61.2821, "y": 19.1026}, {"x": 58.7179, "y": 18.3333}, {"x": 55.1282, "y": 18.3333}, {"x": 52.3077, "y": 18.3333}, {"x": 49.7436, "y": 17.5641}, {"x": 47.4359, "y": 16.0256}, {"x": 44.8718, "y": 13.718}, {"x": 48.7179, "y": 14.8718}, {"x": 51.2821, "y": 14.8718}, {"x": 54.1026, "y": 14.8718}, {"x": 56.1538, "y": 14.1026}, {"x": 52.0513, "y": 12.5641}, {"x": 48.7179, "y": 11.0256}, {"x": 47.1795, "y": 9.8718}, {"x": 46.1538, "y": 6.0256}, {"x": 50.5128, "y": 9.4872}, {"x": 53.8462, "y": 10.2564}, {"x": 57.4359, "y": 10.2564}, {"x": 60.0, "y": 10.641}, {"x": 64.1026, "y": 10.641}, {"x": 66.9231, "y": 10.641}, {"x": 71.2821, "y": 10.641}, {"x": 74.359, "y": 10.641}, {"x": 78.2051, "y": 10.641}, {"x": 67.9487, "y": 8.718}, {"x": 68.4615, "y": 5.2564}, {"x": 68.2051, "y": 2.9487}, {"x": 37.6923, "y": 25.7692}, {"x": 39.4872, "y": 25.3846}, {"x": 91.2821, "y": 41.5385}, {"x": 50.0, "y": 95.7692}, {"x": 47.9487, "y": 95.0}, {"x": 44.1026, "y": 92.6923}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+</div></div>
+<div class="fragment">
+<p>🦖🦖🦖🦖🦖🦖🦖🦖🦖🦖🦖🦖🦖</p>
+</div>
+</section></section>
+<section>
+<section id="the-big-picture" class="title-slide slide level1 center">
+<h1>The big picture</h1>
+
+</section>
+<section id="andy-is-a-polars-stan" class="slide level2 smaller">
+<h2>Andy is a polars stan</h2>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="media/star-history.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
+</figure>
+</div>
+</div>
+
+<aside><div>
+<p>https://star-history.com/#apache/spark&amp;pola-rs/polars&amp;pandas-dev/pandas&amp;narwhals-dev/narwhals&amp;duckdb/duckdb&amp;Date</p>
+</div></aside></section>
+<section id="comparison" class="slide level2">
+<h2>Comparison</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>pandas</strong></p>
+<ul>
+<li>✅ Very widely used and supported</li>
+<li>✅ Stable</li>
+<li>❓ More imperative, traditional API</li>
+<li>❌ Inconsistent API, multiple ways of doing the same thing</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>polars</strong></p>
+<ul>
+<li>✅ More consistent, functional-style API</li>
+<li>✅ Faster, less memory footprint</li>
+<li>✅ Works with OOM datasets out of the box</li>
+<li>❌ API still changing</li>
+</ul>
+</div></div>
+</section>
+<section id="other-frameworks" class="slide level2">
+<h2>Other frameworks</h2>
+<div>
+<ul>
+<li class="fragment"><a href="https://narwhals-dev.github.io/narwhals/">Narwhals</a></li>
+<li class="fragment"><a href="https://duckdb.org">DuckDB</a></li>
+</ul>
+</div>
+</section>
+<section id="thank-you" class="slide level2">
+<h2>Thank you!</h2>
+<p>Scan this and let us know how we did 🤗</p>
+
+
+<img data-src="media/pydata-meetup-feedback-logo.png" class="quarto-figure quarto-figure-center r-stretch"><div class="quarto-auto-generated-content">
+<div class="footer footer-default">
+
+</div>
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

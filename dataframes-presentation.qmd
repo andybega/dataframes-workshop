@@ -1,0 +1,751 @@
+---
+title: "Python dataframes with pandas and polars"
+author: "Andreas Beger and Isaac Chung <br/> PyData Tallinn x Python CodeClub <br/> 27 November 2024"
+format: 
+    revealjs:
+        theme: [default, styles.scss]
+        embed-resources: false
+execute:
+  echo: true
+---
+
+## Bios
+
+:::: {.columns}
+
+::: {.column width="47%" .incremental}
+**Andreas Beger**
+
+- 🏢 Data Scientist, Consult.
+- 🏃‍♂️🐌 Slow marathoner
+- 📍 🇩🇪/🇭🇷 → 🇺🇸 → 🇪🇪
+- 🎓 PhD Political Science
+
+:::
+
+::: {.column width="53%" .incremental}
+**Isaac Chung**
+
+- 🏢 Staff Data Scientist, Wrike
+- 🏊‍♂️🚴🏃‍♂️ Fast triathlete
+- 📍 🇭🇰 → 🇨🇦 → 🇪🇪
+- 🎓 MS Machine Learning
+
+:::
+
+::: {.fragment}
+
+****
+
+🐍 We are also the PyData Tallinn co-organizers.
+
+:::
+
+::::
+
+## Getting setup
+
+Instructions for how to follow along in notebooks...GitHub codespaces?
+
+# What are dataframes?
+
+## Definition 
+
+:::: {.columns  .v-center-container}
+
+::: {.column width="60%" .incremental}
+
+- Dataframes are a data type representing 2D tables 
+- Where the columns have names
+- Unlike matrices or arrays, columns might have different data types
+- And the rows are identified by one or more ID variables
+
+:::
+
+::: {.column width="10%"}
+
+:::
+
+::: {.column width="30%" .fragment}
+
+```{python}
+#| echo: false
+#| output: asis
+import polars as pl
+df = pl.from_dicts([
+    {"x": 1, "y": 2, "group": "a"},
+    {"x": 4, "y": 7, "group": "b"},
+    {"x": 3, "y": 8, "group": "a"},
+    {"x": 9, "y": 2, "group": "b"}
+])
+with pl.Config(
+    tbl_formatting="MARKDOWN",
+    tbl_hide_column_data_types=True,
+    tbl_hide_dataframe_shape=True,
+):
+    print(df)
+```
+
+:::
+
+::::
+
+## Why?
+
+. . . 
+
+Imagine working with tabular data if we didn't have dataframes and associated methods. 
+
+::: {.fragment}
+
+```{python}
+by_rows = [
+    {"x": 1, "y": 2, "group": "a"},
+    {"x": 4, "y": 7, "group": "b"},
+    {"x": 3, "y": 8, "group": "a"},
+    {"x": 9, "y": 2, "group": "b"}
+]
+```
+
+:::
+
+<br/>
+
+::: {.fragment}
+
+```{python}
+by_columns = {
+    "x": [1, 4, 3, 9],
+    "y": [2, 7, 8, 2],
+    "group": ["a", "b", "a", "b"]
+}
+```
+
+:::
+
+## Common dataframe operations
+
+:::: {.columns .v-center-container}
+
+::: {.column width="50%" .incremental}
+
+- 📖 ✍️ read and write
+- 🔬 inspect
+- 🛒 select columns
+- 🔍 filter rows
+
+:::
+
+::: {.column width="50%" .incremental}
+
+- 🥪 mutate, add columns
+- 👨‍👩‍👧‍👦 group and aggregate
+- 🤝 join other dataframes
+- 🧱 reshape wide, long
+
+:::
+
+::::
+
+## Agenda 
+
+::: {.incremental}
+
+1. Pandas
+    - Basic operations through group/aggregate
+2. Polars
+    - Expressions
+    - Joining dataframes and reshaping / pivoting
+3. Big picture
+    - Pandas and Polars pros and cons
+    - Some other frameworks
+
+:::
+
+## Link to notebooks
+
+![](media/dataframes-repo-qr-code.png){fig-align="center"}
+
+# Section 1: pandas
+
+![](media/pandas-logo.png)
+
+## History
+
+Wes McKinney
+
+- 2008
+
+originally built on top of numpy
+pandas 2 () adds support for arrow backend
+
+## Getting started {.smaller}
+
+```{python}
+#| echo: true
+import numpy as np
+import pandas as pd
+
+df = pd.DataFrame({
+    "quarter": [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4],
+    "x": np.random.randn(12),
+    "date": pd.date_range("2024-01-01", periods=12, freq="MS")
+})
+
+df.head()
+```
+
+## Components of a dataframe {.smaller}
+
+. . . 
+
+Series
+
+```{python}
+df.x
+```
+
+. . . 
+
+Columns
+
+```{python}
+df.columns
+```
+
+. . . 
+
+Index
+
+```{python}
+df.index
+```
+
+## Input - reading data {.smaller}
+
+```{python}
+accidents = pd.read_csv("data/estonia-traffic-accidents-clean.csv")
+```
+
+## Inspecting {.smaller}
+
+. . . 
+
+```{python}
+accidents.shape
+```
+
+. . . 
+
+```{python}
+accidents.columns
+```
+
+. . . 
+
+```{python}
+#| eval: false
+accidents.head()
+```
+
+```{python}
+#| echo: false
+accidents[["date", "persons_involved", "killed", "injured", "county"]].head()
+```
+
+## Inspecting {.smaller}
+
+```{python}
+accidents.info()
+```
+
+
+
+## Selecting columns {.smaller}
+
+Different ways, one is indexing with `[]`:
+
+```{python}
+accidents["date"].head(4)
+```
+
+Multiple columns
+
+```{python}
+#| output: true
+accidents[["date", "county"]].head(4)
+```
+
+## Mutating columns {.smaller}
+
+Right now date is stored as a string:
+
+```{python}
+accidents["date"][0]
+```
+
+```{python}
+type(accidents["date"][0])
+```
+
+. . . 
+
+<br/>
+
+Convert it to proper data type:
+
+```{python}
+accidents["date"] = pd.to_datetime(accidents["date"])
+type(accidents["date"][0])
+```
+
+## Sidebar: Pandas Series {.smaller}
+
+```{python}
+dates = accidents["date"]
+type(dates)
+```
+
+<br/>
+
+. . .  
+
+```{python}
+start = accidents["date"].min()
+end = accidents["date"].max()
+print(f"First accident: {start}\nLast accident: {end}")
+```
+
+<br/>
+
+. . . 
+
+```{python}
+accidents["accident_type"].value_counts()
+```
+
+
+## Filtering rows {.smaller}
+
+```{python}
+accidents[accidents["county"] == "Harju maakond"].shape
+```
+
+<br/>
+
+. . . 
+
+```{python}
+accidents["county"] == "Harju maakond"
+```
+
+
+## Mutating dataframes {.smaller}
+
+```{python}
+accidents["killed_or_injured"] = accidents["killed"] + accidents["injured"]
+accidents[['killed', 'injured', 'killed_or_injured']].head()
+```
+
+<br/>
+
+```{python}
+accidents["killed_or_injured"].sum()
+```
+
+
+## Grouping and summarizing {.smaller}
+
+How many people were harmed, by accident type?
+
+. . . 
+
+```{python}
+by_type = accidents.groupby("accident_type").agg({"killed_or_injured": "sum"})
+```
+
+. . . 
+
+```{python}
+by_type
+```
+
+
+
+## pandas is great
+
+
+. . .
+
+<br/>
+2017, Wes McKinney (creator of pandas):
+
+. . . 
+
+> **10 Things I Hate About Pandas **
+
+. . . 
+
+- Inefficient memory management, need 5-10x data size
+- Eager evaluation → limited query planning
+- No multi-core
+
+
+::: aside
+[https://wesmckinney.com/blog/apache-arrow-pandas-internals/](https://wesmckinney.com/blog/apache-arrow-pandas-internals/)
+:::
+
+
+# Section 2: polars
+
+![](media/polars-logo.jpg)
+
+
+
+## History
+
+2020 Ritchie Vink
+
+Uses arrow as internal representation 
+
+(Created by Wes McKinney in 2016!)
+
+## new slides
+
+- Out with indices
+- Out with `.loc`, `.iloc`
+- Out with `[`
+- In with lazy evaluation
+- Expressions
+
+## Getting started {.smaller}
+
+```{python}
+#| eval: false
+import polars as pl
+
+accidents = pl.read_csv("data/estonia-traffic-accidents-clean.csv")
+accidents.head()
+```
+
+. . . 
+
+```{python}
+#| echo: false
+import polars as pl
+
+accidents = pl.read_csv("data/estonia-traffic-accidents-clean.csv")
+accidents.select(accidents.columns[0:5]).head()
+```
+
+## Easy to convert between the two
+
+```python
+df = df.to_pandas()
+df = pl.from_pandas(df)
+```
+
+## Selecting columns {.smaller}
+
+```{python}
+accidents.select("date", "county").head()
+```
+
+## Expressions {.smaller}
+
+Expressions are abstract, composable **data transformations** that are executed with a **context** that provides data. 
+
+```{python}
+accidents.select(pl.col("date")).head()
+```
+
+## They can be composed {.smaller}
+
+What the biggest accident, in terms of killed or injured?
+
+. . . 
+
+```{python}
+accidents.select(
+    # select 'killed'
+    pl.col("killed")
+    # add 'injured'
+    .add(pl.col("injured"))
+    # give the result a new column name
+    .alias("killed_or_injured")
+    # identify the max value
+    .max())
+```
+
+
+## And they work in multiple contexts
+
+- `select()`
+- `filter()`
+- `with_columns()`: mutating dataframes
+- `group_by()` and aggregations
+
+## Filtering rows 
+
+How many accidents were in Harju county?
+
+```{python}
+accidents.filter(pl.col("county").eq("Harju maakond")).shape
+```
+
+. . . 
+
+```{python}
+accidents.filter(pl.col("county").str.contains("Harju")).shape
+```
+
+## Mutating dataframes {.smaller}
+
+`with_columns()` + expressions
+
+. . . 
+
+```{python}
+accidents = accidents.with_columns(
+    pl.col("killed").add(pl.col("injured")).alias("killed_or_injured"),
+    pl.col("killed").add(pl.col("injured")).truediv(pl.col("persons_involved")).alias("harmed_rate")
+)
+accidents.select(["date", "persons_involved", "killed_or_injured", "harmed_rate"]).head(5)
+```
+
+## Group and summarize/aggregate {.smaller}
+
+`group_by()` + `agg()` or `with_columns()`
+
+. . . 
+
+```{python}
+by_county = (accidents
+             .group_by("county")
+             .agg(pl.col("killed_or_injured").sum())
+             .sort("killed_or_injured", descending=True)
+)
+by_county.head()
+```
+
+## (Optional) Joining dataframes {.smaller}
+
+What's the per capita accident victim rate?
+
+. . . 
+
+```{python}
+county_pop = (pl.read_csv("data/county-pop.csv", skip_rows=2)
+              .rename({"County": "county", "Age groups total": "population"})
+              .select(["county", "population"])
+              # this has "county" in the county names, not "maakond"
+              .with_columns(pl.col("county").str.replace("county", "maakond"))
+              )
+
+by_county_w_pop = by_county.join(county_pop, on="county", how="left")
+by_county_w_pop.head(3)
+```
+
+## (Optional) Joining dataframes {.smaller}
+
+Now we can use some simple select + expressions do to the math:
+
+. . . 
+
+```{python}
+by_county_w_pop.select(
+    pl.col("county"), 
+    pl.col("killed_or_injured"),
+    pl.col("killed_or_injured").truediv(pl.col("population")).mul(1000).alias("rate/1000")
+    ).head(3)
+```
+
+## (Optional) Reshaping / pivoting dataframes {.smaller}
+
+We're going to use a different dataset on reflector usage for this.
+
+. . . 
+
+```{python}
+reflectors = (pl.read_csv("data/reflectors.csv", has_header=True, separator=";", skip_rows=2)
+              .filter(pl.col("Sex").ne("Men and women"))
+              .drop(["Type of data", "Year", "All age groups (16-64)"])
+)
+reflectors.head()
+```
+
+## (Optional) Reshaping / pivoting dataframes {.smaller}
+
+```{python}
+reflectors = (reflectors
+              .unpivot(index=["Reflector use", "Sex"], 
+                       variable_name="age_group", 
+                       value_name="percentage")
+)
+reflectors.head()
+```
+
+## Plot reflector use by age and gender {.smaller}
+
+```{python}
+(reflectors
+ .filter(pl.col("Reflector use").eq("Never"))
+ .plot.line(x = "age_group", y = "percentage", color = "Sex")
+ .properties(width=700, height=300)
+)
+```
+
+## Modified plot {.smaller}
+
+One category is "Never walk on dark streets, roads"...🧐
+
+. . . 
+
+```{python}
+(reflectors
+ .with_columns(pl.col("Reflector use").str.replace("Never walk on dark streets, roads", "Never"))
+ .group_by(["Reflector use", "Sex", "age_group"])
+ .agg(pl.col("percentage").sum())
+ .filter(pl.col("Reflector use").eq("Never"))
+ .sort(["age_group", "Sex"])
+ .plot.line(x = "age_group", y = "percentage", color = "Sex")
+ .properties(width=700, height=300)
+)
+```
+
+## Why you should plot your data 😼 {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%" .fragment}
+
+```{python}
+df1 = pl.read_csv("data/dataset1.csv")
+df1.shape
+```
+
+::: {.fragment}
+
+```{python}
+stats = ["mean", "std", "25%", "75%"]
+(df1
+ .describe()
+ .filter(pl.col("statistic").is_in(stats))
+)
+```
+
+:::
+
+:::
+
+::: {.column width="50%" .fragment}
+
+```{python}
+df2 = pl.read_csv("data/dataset2.csv")
+df2.shape
+```
+
+::: {.fragment}
+
+```{python}
+stats = ["mean", "std", "25%", "75%"]
+(df2
+ .describe()
+ .filter(pl.col("statistic").is_in(stats))
+)
+```
+
+:::
+
+:::
+
+::::
+
+## Why you should plot pt2
+
+:::: {.columns}
+
+::: {.column width="50%" .fragment}
+
+```{python}
+df1.plot.point("x", "y")
+```
+
+:::
+
+::: {.column width="50%" .fragment}
+
+```{python}
+df2.plot.point("x", "y")
+```
+
+:::
+
+::::
+
+::: {.fragment}
+
+🦖🦖🦖🦖🦖🦖🦖🦖🦖🦖🦖🦖🦖
+
+:::
+
+
+# The big picture
+
+## Andy is a polars stan {.smaller}
+
+::: {.fragment}
+
+![](media/star-history.png){width=70% fig-align="center"}
+
+:::
+
+::: aside
+https://star-history.com/#apache/spark&pola-rs/polars&pandas-dev/pandas&narwhals-dev/narwhals&duckdb/duckdb&Date 
+:::
+
+
+
+## Comparison
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**pandas**
+
+- ✅ Very widely used and supported
+- ✅ Stable
+- ❓ More imperative, traditional API
+- ❌ Inconsistent API, multiple ways of doing the same thing
+
+:::
+
+::: {.column width="50%"}
+
+**polars**
+
+- ✅ More consistent, functional-style API
+- ✅ Faster, less memory footprint
+- ✅ Works with OOM datasets out of the box
+- ❌ API still changing
+
+:::
+
+::::
+
+
+## Other frameworks
+
+::: {.incremental}
+
+- [Narwhals](https://narwhals-dev.github.io/narwhals/)
+- [DuckDB](https://duckdb.org)
+
+:::
+
+## Thank you!
+
+Scan this and let us know how we did 🤗
+
+![](media/pydata-meetup-feedback-logo.png){fig-align="center"}
