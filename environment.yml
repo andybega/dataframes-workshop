@@ -7,4 +7,7 @@ dependencies:
   - polars
   - pandas
   - jupyter
+  - altair
+  - dateparser
+  - pyarrow
 prefix: /Users/andy/miniconda3/envs/dataframes_workshop

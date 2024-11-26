@@ -9,6 +9,7 @@ execute:
   echo: true
 ---
 
+
 ## Bios
 
 :::: {.columns}
@@ -43,9 +44,49 @@ execute:
 
 ::::
 
-## Getting setup
+## Agenda
 
-Instructions for how to follow along in notebooks...GitHub codespaces?
+::: {.incremental}
+
+0. Prelude: setting up, what are dataframes?
+1. (notebook) pandas and basic dataframe concepts and operations
+2. (notebook) polars, retread basic and also cover more advanced operations
+3. The bigger picture: pandas vs polars, other frameworks
+
+:::
+
+## Setting up - link to repo
+
+![](media/dataframes-repo-qr-code.png){fig-align="center"}
+
+## Using GitHub Codespaces
+
+![](media/setup-codespaces-1.png){fig-align="center"}
+
+## Open dataframes.ipynb
+
+![](media/setup-codespaces-2.png){fig-align="center"}
+
+## To just follow along
+
+![](media/setup-just-follow.png){fig-align="center"}
+
+## While we wait
+
+::: {.incremental}
+
+- Who has used pandas before?
+- polars?
+- Another data framework in Python, e.g. database + SQL?
+- Does code like this mean anything to you?
+  ```r
+  titanic %>% 
+    select(Pclass, Survived) %>% 
+    group_by(Pclass) %>% 
+    summarize(passengers = n(), surv_rate = mean(Survived))
+  ```
+
+:::
 
 # What are dataframes?
 
@@ -147,24 +188,6 @@ by_columns = {
 
 ::::
 
-## Agenda 
-
-::: {.incremental}
-
-1. Pandas
-    - Basic operations through group/aggregate
-2. Polars
-    - Expressions
-    - Joining dataframes and reshaping / pivoting
-3. Big picture
-    - Pandas and Polars pros and cons
-    - Some other frameworks
-
-:::
-
-## Link to notebooks
-
-![](media/dataframes-repo-qr-code.png){fig-align="center"}
 
 # Section 1: pandas
 
@@ -172,14 +195,27 @@ by_columns = {
 
 ## History
 
-Wes McKinney
+:::: {.columns}
 
-- 2008
+::: {.column width="50%" .incremental}
 
-originally built on top of numpy
-pandas 2 () adds support for arrow backend
+- Created by Wes McKinney, now at Posit PBC
+- Started in 2008
+- Originally built on top of `numpy`
+
+:::
+
+::: {.column width="50%" .fragment}
+
+![](media/wes-mckinney.png)
+
+:::
+
+::::
 
 ## Getting started {.smaller}
+
+. . . 
 
 ```{python}
 #| echo: true
@@ -223,6 +259,8 @@ df.index
 
 ## Input - reading data {.smaller}
 
+. . . 
+
 ```{python}
 accidents = pd.read_csv("data/estonia-traffic-accidents-clean.csv")
 ```
@@ -265,11 +303,17 @@ accidents.info()
 
 Different ways, one is indexing with `[]`:
 
+. . . 
+
 ```{python}
 accidents["date"].head(4)
 ```
 
+. . . 
+
 Multiple columns
+
+. . . 
 
 ```{python}
 #| output: true
@@ -324,6 +368,9 @@ print(f"First accident: {start}\nLast accident: {end}")
 accidents["accident_type"].value_counts()
 ```
 
+. . . 
+
+What if we want to know how many accidents were in Harju county?
 
 ## Filtering rows {.smaller}
 
@@ -342,10 +389,18 @@ accidents["county"] == "Harju maakond"
 
 ## Mutating dataframes {.smaller}
 
+. . . 
+
+How many people were harmed in accidents in total?
+
+. . . 
+
 ```{python}
 accidents["killed_or_injured"] = accidents["killed"] + accidents["injured"]
 accidents[['killed', 'injured', 'killed_or_injured']].head()
 ```
+
+. . . 
 
 <br/>
 
@@ -355,6 +410,8 @@ accidents["killed_or_injured"].sum()
 
 
 ## Grouping and summarizing {.smaller}
+
+. . . 
 
 How many people were harmed, by accident type?
 
@@ -370,10 +427,15 @@ by_type = accidents.groupby("accident_type").agg({"killed_or_injured": "sum"})
 by_type
 ```
 
+## (Optional) More on indices
 
+See notebook.
+
+## (Optional) Cleaning the accidents data
+
+See notebook. 
 
 ## pandas is great
-
 
 . . .
 
@@ -404,19 +466,26 @@ by_type
 
 ## History
 
-2020 Ritchie Vink
+:::: {.columns}
 
-Uses arrow as internal representation 
+::: {.column width="60%" .incremental}
 
-(Created by Wes McKinney in 2016!)
+- Created in 2020 by Ritchie Vink
+- Structural engineer gone data scientist/engineer
+- Written in Rust
+- Uses Arrow as internal representation 
+- Arrow was created by Wes McKinney in 2016!
 
-## new slides
+:::
 
-- Out with indices
-- Out with `.loc`, `.iloc`
-- Out with `[`
-- In with lazy evaluation
-- Expressions
+::: {.column width=40% .fragment}
+
+![](media/ritchie-vink.jpg)
+
+:::
+
+:::: 
+
 
 ## Getting started {.smaller}
 
@@ -438,12 +507,30 @@ accidents = pl.read_csv("data/estonia-traffic-accidents-clean.csv")
 accidents.select(accidents.columns[0:5]).head()
 ```
 
-## Easy to convert between the two
+## polars is different from pandas
+
+::: {.incremental}
+
+- Use methods, not `[]`; no index
+- Compose methods (methods chaining)
+- **Expressions**
+
+:::
+
+::: {.fragment}
 
 ```python
-df = df.to_pandas()
-df = pl.from_pandas(df)
+import pyarrow
+
+df = pl.DataFrame({"x": [1, 2, 3], "y": [4, 5, 6]})
+# to make this a pandas dataframe
+# (requires pyarrow)
+df_pd = df.to_pandas()
+# to convert it back to polars dataframe
+df_pl = pl.DataFrame(df_pd)
 ```
+
+:::
 
 ## Selecting columns {.smaller}
 
