@@ -863,7 +863,7 @@ https://star-history.com/#apache/spark&pola-rs/polars&pandas-dev/pandas&narwhals
 - ✅ More consistent, functional-style API
 - ✅ Faster, less memory footprint
 - ✅ Works with OOM datasets out of the box
-- ❌ API still changing
+- ❌ Not as widely adopted yet
 
 :::
 

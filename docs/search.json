@@ -109,14 +109,14 @@
     "href": "dataframes-presentation.html#getting-started",
     "title": "Python dataframes with pandas and polars",
     "section": "Getting started",
-    "text": "Getting started\n\n\nimport numpy as np\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"quarter\": [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4],\n    \"x\": np.random.randn(12),\n    \"date\": pd.date_range(\"2024-01-01\", periods=12, freq=\"MS\")\n})\n\ndf.head()\n\n\n\n\n\n\n\n\nquarter\nx\ndate\n\n\n\n\n0\n1\n-1.125680\n2024-01-01\n\n\n1\n1\n-0.112682\n2024-02-01\n\n\n2\n1\n0.259902\n2024-03-01\n\n\n3\n2\n0.426993\n2024-04-01\n\n\n4\n2\n0.669239\n2024-05-01"
+    "text": "Getting started\n\n\nimport numpy as np\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"quarter\": [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4],\n    \"x\": np.random.randn(12),\n    \"date\": pd.date_range(\"2024-01-01\", periods=12, freq=\"MS\")\n})\n\ndf.head()\n\n\n\n\n\n\n\n\nquarter\nx\ndate\n\n\n\n\n0\n1\n2.041655\n2024-01-01\n\n\n1\n1\n-0.174333\n2024-02-01\n\n\n2\n1\n2.135374\n2024-03-01\n\n\n3\n2\n-1.819573\n2024-04-01\n\n\n4\n2\n-0.674118\n2024-05-01"
   },
   {
     "objectID": "dataframes-presentation.html#components-of-a-dataframe",
     "href": "dataframes-presentation.html#components-of-a-dataframe",
     "title": "Python dataframes with pandas and polars",
     "section": "Components of a dataframe",
-    "text": "Components of a dataframe\n\nSeries\n\ndf.x\n\n0    -1.125680\n1    -0.112682\n2     0.259902\n3     0.426993\n4     0.669239\n5     0.429788\n6     1.998504\n7     0.445176\n8     1.592101\n9     0.135922\n10    0.115432\n11   -0.824800\nName: x, dtype: float64\n\n\n\n\nColumns\n\ndf.columns\n\nIndex(['quarter', 'x', 'date'], dtype='object')\n\n\n\n\nIndex\n\ndf.index\n\nRangeIndex(start=0, stop=12, step=1)"
+    "text": "Components of a dataframe\n\nSeries\n\ndf.x\n\n0     2.041655\n1    -0.174333\n2     2.135374\n3    -1.819573\n4    -0.674118\n5     0.732138\n6     0.221117\n7     1.719229\n8    -0.126389\n9     0.598315\n10   -0.381752\n11    1.799010\nName: x, dtype: float64\n\n\n\n\nColumns\n\ndf.columns\n\nIndex(['quarter', 'x', 'date'], dtype='object')\n\n\n\n\nIndex\n\ndf.index\n\nRangeIndex(start=0, stop=12, step=1)"
   },
   {
     "objectID": "dataframes-presentation.html#input---reading-data",
@@ -305,7 +305,7 @@
     "href": "dataframes-presentation.html#plot-reflector-use-by-age-and-gender",
     "title": "Python dataframes with pandas and polars",
     "section": "Plot reflector use by age and gender",
-    "text": "Plot reflector use by age and gender\n\n\nreflectors.get_column(\"Reflector use\").unique().to_list()\n\n['Never', 'Never walk on dark streets, roads', 'Sometimes', 'Nearly always']\n\n\n\n\n\n(reflectors\n .filter(pl.col(\"Reflector use\").eq(\"Never\"))\n .plot.line(x = \"age_group\", y = \"percentage\", color = \"Sex\")\n .properties(width=700, height=300)\n)"
+    "text": "Plot reflector use by age and gender\n\n\nreflectors.get_column(\"Reflector use\").unique().to_list()\n\n['Nearly always', 'Never walk on dark streets, roads', 'Never', 'Sometimes']\n\n\n\n\n\n(reflectors\n .filter(pl.col(\"Reflector use\").eq(\"Never\"))\n .plot.line(x = \"age_group\", y = \"percentage\", color = \"Sex\")\n .properties(width=700, height=300)\n)"
   },
   {
     "objectID": "dataframes-presentation.html#modified-plot",
@@ -340,7 +340,7 @@
     "href": "dataframes-presentation.html#comparison",
     "title": "Python dataframes with pandas and polars",
     "section": "Comparison",
-    "text": "Comparison\n\n\npandas\n\n✅ Very widely used and supported\n✅ Stable\n❓ More imperative, traditional API\n❌ Inconsistent API, multiple ways of doing the same thing\n\n\npolars\n\n✅ More consistent, functional-style API\n✅ Faster, less memory footprint\n✅ Works with OOM datasets out of the box\n❌ API still changing"
+    "text": "Comparison\n\n\npandas\n\n✅ Very widely used and supported\n✅ Stable\n❓ More imperative, traditional API\n❌ Inconsistent API, multiple ways of doing the same thing\n\n\npolars\n\n✅ More consistent, functional-style API\n✅ Faster, less memory footprint\n✅ Works with OOM datasets out of the box\n❌ Not as widely adopted yet"
   },
   {
     "objectID": "dataframes-presentation.html#other-frameworks",
