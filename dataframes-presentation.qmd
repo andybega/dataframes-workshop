@@ -53,6 +53,8 @@ execute:
 
 ## Setting up - link to repo
 
+[https://github.com/andybega/dataframes-workshop](https://github.com/andybega/dataframes-workshop)
+
 ![](media/dataframes-repo-qr-code.png){fig-align="center"}
 
 ## Using GitHub Codespaces

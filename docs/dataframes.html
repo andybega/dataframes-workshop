@@ -178,31 +178,31 @@ Python Code Club x PyData Tallinn<br>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>1</td>
-<td>-0.516363</td>
+<td>-0.640642</td>
 <td>2024-01-01</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>1</td>
-<td>-0.311607</td>
+<td>-0.801308</td>
 <td>2024-02-01</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>2</td>
-<td>-0.177434</td>
+<td>-0.382784</td>
 <td>2024-03-01</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>2</td>
-<td>1.341635</td>
+<td>-0.945216</td>
 <td>2024-04-01</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>3</td>
-<td>1.395682</td>
+<td>0.296990</td>
 <td>2024-05-01</td>
 </tr>
 </tbody>
@@ -225,11 +225,11 @@ Python Code Club x PyData Tallinn<br>
 <div id="cell-7" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df.x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
-<pre><code>0   -0.516363
-1   -0.311607
-2   -0.177434
-3    1.341635
-4    1.395682
+<pre><code>0   -0.640642
+1   -0.801308
+2   -0.382784
+3   -0.945216
+4    0.296990
 Name: x, dtype: float64</code></pre>
 </div>
 </div>
@@ -1693,14 +1693,14 @@ memory usage: 6.4+ MB</code></pre>
 <section id="optional-reshaping-pivoting-dataframes" class="level3">
 <h3 class="anchored" data-anchor-id="optional-reshaping-pivoting-dataframes">(Optional) Reshaping / pivoting dataframes</h3>
 <p>For this we will look at another dataset, on reflector usage. (🌃🎄 Tis’ the time of year…)</p>
-<div id="cell-96" class="cell" data-execution_count="61">
+<div id="cell-96" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>reflectors <span class="op">=</span> (pl.read_csv(<span class="st">"data/reflectors.csv"</span>, has_header<span class="op">=</span><span class="va">True</span>, separator<span class="op">=</span><span class="st">";"</span>, skip_rows<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>              .<span class="bu">filter</span>(pl.col(<span class="st">"Sex"</span>).ne(<span class="st">"Men and women"</span>))</span>
 <span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>              .drop([<span class="st">"Type of data"</span>, <span class="st">"Year"</span>, <span class="st">"All age groups (16-64)"</span>])</span>
 <span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>              .sort(<span class="st">"Reflector use"</span>, <span class="st">"Sex"</span>)</span>
 <span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>reflectors.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="61">
+<div class="cell-output cell-output-display" data-execution_count="44">
 <div><style>
 .dataframe > thead > tr,
 .dataframe > tbody > tr {
@@ -1787,7 +1787,7 @@ memory usage: 6.4+ MB</code></pre>
 <li>One with the age group information.</li>
 <li>The other with the reflector usage values.</li>
 </ul>
-<div id="cell-98" class="cell" data-execution_count="62">
+<div id="cell-98" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>reflectors <span class="op">=</span> (reflectors</span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>              .unpivot(index<span class="op">=</span>[<span class="st">"Reflector use"</span>, <span class="st">"Sex"</span>], </span>
 <span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>                       variable_name<span class="op">=</span><span class="st">"age_group"</span>, </span>
@@ -1795,7 +1795,7 @@ memory usage: 6.4+ MB</code></pre>
 <span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>              .sort(<span class="st">"Reflector use"</span>, <span class="st">"Sex"</span>, <span class="st">"age_group"</span>)</span>
 <span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>reflectors.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="62">
+<div class="cell-output cell-output-display" data-execution_count="45">
 <div><style>
 .dataframe > thead > tr,
 .dataframe > tbody > tr {
@@ -1867,23 +1867,23 @@ memory usage: 6.4+ MB</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="46">
 
 <style>
-  #altair-viz-8c0fcf62194c431bb5d8598af0452ab5.vega-embed {
+  #altair-viz-4d026c451e234dd3a917505c6103980b.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-8c0fcf62194c431bb5d8598af0452ab5.vega-embed details,
-  #altair-viz-8c0fcf62194c431bb5d8598af0452ab5.vega-embed details summary {
+  #altair-viz-4d026c451e234dd3a917505c6103980b.vega-embed details,
+  #altair-viz-4d026c451e234dd3a917505c6103980b.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-8c0fcf62194c431bb5d8598af0452ab5"></div>
+<div id="altair-viz-4d026c451e234dd3a917505c6103980b"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-8c0fcf62194c431bb5d8598af0452ab5") {
-      outputDiv = document.getElementById("altair-viz-8c0fcf62194c431bb5d8598af0452ab5");
+    if (outputDiv.id !== "altair-viz-4d026c451e234dd3a917505c6103980b") {
+      outputDiv = document.getElementById("altair-viz-4d026c451e234dd3a917505c6103980b");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -1929,7 +1929,7 @@ memory usage: 6.4+ MB</code></pre>
         .catch(showError)
         .then(() => displayChart(vegaEmbed));
     }
-  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-70ba5e9649ef105c097b9c80302ecebf"}, "mark": {"type": "line", "tooltip": true}, "encoding": {"color": {"field": "Sex", "type": "nominal"}, "x": {"field": "age_group", "type": "nominal"}, "y": {"field": "percentage", "type": "quantitative"}}, "height": 300, "params": [{"name": "param_1", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "width": 600, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-70ba5e9649ef105c097b9c80302ecebf": [{"Reflector use": "Never", "Sex": "Men", "age_group": "16-24", "percentage": 14.3}, {"Reflector use": "Never", "Sex": "Women", "age_group": "16-24", "percentage": 8.8}, {"Reflector use": "Never", "Sex": "Men", "age_group": "25-34", "percentage": 12.4}, {"Reflector use": "Never", "Sex": "Women", "age_group": "25-34", "percentage": 5.0}, {"Reflector use": "Never", "Sex": "Men", "age_group": "35-44", "percentage": 7.2}, {"Reflector use": "Never", "Sex": "Women", "age_group": "35-44", "percentage": 4.6}, {"Reflector use": "Never", "Sex": "Men", "age_group": "45-54", "percentage": 3.9}, {"Reflector use": "Never", "Sex": "Women", "age_group": "45-54", "percentage": 2.0}, {"Reflector use": "Never", "Sex": "Men", "age_group": "55-64", "percentage": 2.7}, {"Reflector use": "Never", "Sex": "Women", "age_group": "55-64", "percentage": 2.5}]}}, {"mode": "vega-lite"});
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-05a308a935a6aa19aba83463ecdbf77e"}, "mark": {"type": "line", "tooltip": true}, "encoding": {"color": {"field": "Sex", "type": "nominal"}, "x": {"field": "age_group", "type": "nominal"}, "y": {"field": "percentage", "type": "quantitative"}}, "height": 300, "params": [{"name": "param_1", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "width": 600, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-05a308a935a6aa19aba83463ecdbf77e": [{"Reflector use": "Never", "Sex": "Men", "age_group": "16-24", "percentage": 14.3}, {"Reflector use": "Never", "Sex": "Men", "age_group": "25-34", "percentage": 12.4}, {"Reflector use": "Never", "Sex": "Men", "age_group": "35-44", "percentage": 7.2}, {"Reflector use": "Never", "Sex": "Men", "age_group": "45-54", "percentage": 3.9}, {"Reflector use": "Never", "Sex": "Men", "age_group": "55-64", "percentage": 2.7}, {"Reflector use": "Never", "Sex": "Women", "age_group": "16-24", "percentage": 8.8}, {"Reflector use": "Never", "Sex": "Women", "age_group": "25-34", "percentage": 5.0}, {"Reflector use": "Never", "Sex": "Women", "age_group": "35-44", "percentage": 4.6}, {"Reflector use": "Never", "Sex": "Women", "age_group": "45-54", "percentage": 2.0}, {"Reflector use": "Never", "Sex": "Women", "age_group": "55-64", "percentage": 2.5}]}}, {"mode": "vega-lite"});
 </script>
 </div>
 </div>
@@ -1953,23 +1953,23 @@ memory usage: 6.4+ MB</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="47">
 
 <style>
-  #altair-viz-6243e808deb54b15b0e96b7babf9ae42.vega-embed {
+  #altair-viz-ffaea87dd76e4a19bc93821235657950.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-6243e808deb54b15b0e96b7babf9ae42.vega-embed details,
-  #altair-viz-6243e808deb54b15b0e96b7babf9ae42.vega-embed details summary {
+  #altair-viz-ffaea87dd76e4a19bc93821235657950.vega-embed details,
+  #altair-viz-ffaea87dd76e4a19bc93821235657950.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-6243e808deb54b15b0e96b7babf9ae42"></div>
+<div id="altair-viz-ffaea87dd76e4a19bc93821235657950"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-6243e808deb54b15b0e96b7babf9ae42") {
-      outputDiv = document.getElementById("altair-viz-6243e808deb54b15b0e96b7babf9ae42");
+    if (outputDiv.id !== "altair-viz-ffaea87dd76e4a19bc93821235657950") {
+      outputDiv = document.getElementById("altair-viz-ffaea87dd76e4a19bc93821235657950");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -2229,23 +2229,23 @@ memory usage: 6.4+ MB</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="53">
 
 <style>
-  #altair-viz-91489e3b48224adcb5dc4c41fff61fa6.vega-embed {
+  #altair-viz-154d3c4720824f88ad6dabe1aa6a74b5.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-91489e3b48224adcb5dc4c41fff61fa6.vega-embed details,
-  #altair-viz-91489e3b48224adcb5dc4c41fff61fa6.vega-embed details summary {
+  #altair-viz-154d3c4720824f88ad6dabe1aa6a74b5.vega-embed details,
+  #altair-viz-154d3c4720824f88ad6dabe1aa6a74b5.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-91489e3b48224adcb5dc4c41fff61fa6"></div>
+<div id="altair-viz-154d3c4720824f88ad6dabe1aa6a74b5"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-91489e3b48224adcb5dc4c41fff61fa6") {
-      outputDiv = document.getElementById("altair-viz-91489e3b48224adcb5dc4c41fff61fa6");
+    if (outputDiv.id !== "altair-viz-154d3c4720824f88ad6dabe1aa6a74b5") {
+      outputDiv = document.getElementById("altair-viz-154d3c4720824f88ad6dabe1aa6a74b5");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -2301,23 +2301,23 @@ memory usage: 6.4+ MB</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="54">
 
 <style>
-  #altair-viz-b0f7b798b88e4dd58d659b37ba623814.vega-embed {
+  #altair-viz-9709efd6250b42dcbf7440a0267ddc76.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-b0f7b798b88e4dd58d659b37ba623814.vega-embed details,
-  #altair-viz-b0f7b798b88e4dd58d659b37ba623814.vega-embed details summary {
+  #altair-viz-9709efd6250b42dcbf7440a0267ddc76.vega-embed details,
+  #altair-viz-9709efd6250b42dcbf7440a0267ddc76.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-b0f7b798b88e4dd58d659b37ba623814"></div>
+<div id="altair-viz-9709efd6250b42dcbf7440a0267ddc76"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-b0f7b798b88e4dd58d659b37ba623814") {
-      outputDiv = document.getElementById("altair-viz-b0f7b798b88e4dd58d659b37ba623814");
+    if (outputDiv.id !== "altair-viz-9709efd6250b42dcbf7440a0267ddc76") {
+      outputDiv = document.getElementById("altair-viz-9709efd6250b42dcbf7440a0267ddc76");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
