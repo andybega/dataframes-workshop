@@ -14,7 +14,7 @@ execute:
 
 :::: {.columns}
 
-::: {.column width="47%" .incremental}
+::: {.column width="47%"}
 **Andreas Beger**
 
 - 🏢 Data Scientist, Consult.
@@ -24,7 +24,7 @@ execute:
 
 :::
 
-::: {.column width="53%" .incremental}
+::: {.column width="53%"}
 **Isaac Chung**
 
 - 🏢 Staff Data Scientist, Wrike
@@ -34,13 +34,9 @@ execute:
 
 :::
 
-::: {.fragment}
-
 ****
 
 🐍 We are also the PyData Tallinn co-organizers.
-
-:::
 
 ::::
 
@@ -172,7 +168,7 @@ by_columns = {
 
 :::: {.columns}
 
-::: {.column width="50%" .incremental}
+::: {.column width="50%"}
 
 - Created by Wes McKinney, now at Posit PBC
 - Started in 2008
@@ -180,7 +176,7 @@ by_columns = {
 
 :::
 
-::: {.column width="50%" .fragment}
+::: {.column width="50%"}
 
 ![](media/wes-mckinney.png)
 
@@ -356,7 +352,7 @@ accidents["accident_type"].value_counts()
 
 . . . 
 
-# What if we want to know how many accidents were in Harju county?
+# How many accidents were in Harju county?
 
 - 🔍 filter rows
 
@@ -393,6 +389,12 @@ accidents[['killed', 'injured', 'killed_or_injured']].head()
 
 ```{python}
 accidents["killed_or_injured"].sum()
+```
+
+. . . 
+
+```{python}
+sum(accidents["killed_or_injured"])
 ```
 
 # What about by accident type?
@@ -438,6 +440,12 @@ See notebook.
 - Eager evaluation → limited query planning
 - No multi-core
 
+::: {.fragment}
+
+- Apache Arrow (2016 - ...)
+
+:::
+
 
 ::: aside
 [https://wesmckinney.com/blog/apache-arrow-pandas-internals/](https://wesmckinney.com/blog/apache-arrow-pandas-internals/)
@@ -454,17 +462,16 @@ See notebook.
 
 :::: {.columns}
 
-::: {.column width="60%" .incremental}
+::: {.column width="60%"}
 
 - Created in 2020 by Ritchie Vink
 - Structural engineer gone data scientist/engineer
 - Written in Rust
 - Uses Arrow as internal representation 
-- Arrow was created by Wes McKinney in 2016!
 
 :::
 
-::: {.column width=40% .fragment}
+::: {.column width=40%}
 
 ![](media/ritchie-vink.jpg)
 
@@ -495,17 +502,7 @@ accidents.select(accidents.columns[0:5]).head()
 
 ## polars is different from pandas
 
-::: {.incremental}
-
-- Use methods, not `[]`; no index
-- Compose methods (methods chaining)
-- **Expressions**
-
-:::
-
-::: {.fragment}
-
-We can always convert back and forth:
+But, we can always convert back and forth:
 
 ```python
 import pyarrow
@@ -518,9 +515,7 @@ df_pd = df.to_pandas()
 df_pl = pl.DataFrame(df_pd)
 ```
 
-:::
-
-# What the biggest accident, in terms of killed or injured?
+# How many were harmed in the biggest accident?
 
 - 🛒 select columns
 - 🥪 mutate, add columns
@@ -538,11 +533,30 @@ accidents.select("date", "county").head()
 
 Expressions are abstract, composable **data transformations** that are executed with a **context** that provides data. 
 
+. . . 
+
 ```{python}
-accidents.select(pl.col("date")).head()
+accidents.select(pl.col("date")).head(1)
+```
+
+. . . 
+
+```{python}
+foo = pl.col("date")
+foo
+```
+
+. . . 
+
+```{python}
+accidents.select(foo).head(1)
 ```
 
 ## They can be composed {.smaller}
+
+. . . 
+
+How many people were harmed in the biggest accident in our data?
 
 . . . 
 
@@ -574,6 +588,12 @@ accidents.select(
 
 ```{python}
 accidents.filter(pl.col("county").eq("Harju maakond")).shape
+```
+
+. . . 
+
+```{python}
+accidents.filter(pl.col("county")=="Harju maakond").shape
 ```
 
 . . . 
@@ -617,8 +637,9 @@ accidents.select(["date", "persons_involved", "killed_or_injured", "harmed_rate"
 ```{python}
 by_county = (accidents
              .group_by("county")
-             .agg(pl.col("killed_or_injured").sum())
-             .sort("killed_or_injured", descending=True)
+             .agg(pl.len().alias("accidents"),
+                  pl.col("killed_or_injured").sum())
+             .sort("accidents", descending=True)
 )
 by_county.head()
 ```
@@ -657,12 +678,11 @@ by_county_w_pop.select(
     ).head(3)
 ```
 
-# Who is warning reflectors? Men or women? Young or old?
+# Who wears reflectors? Men or women? Young or old?
 
 We will use new data for this. 
 
 - 🧱 reshape wide, long
-
 
 ## Reshaping / pivoting dataframes {.smaller}
 
@@ -672,9 +692,11 @@ We will use new data for this.
 reflectors = (pl.read_csv("data/reflectors.csv", has_header=True, separator=";", skip_rows=2)
               .filter(pl.col("Sex").ne("Men and women"))
               .drop(["Type of data", "Year", "All age groups (16-64)"])
+              .sort("Reflector use", "Sex")
 )
 reflectors.head()
 ```
+
 
 ## Reshaping / pivoting dataframes {.smaller}
 
@@ -683,11 +705,20 @@ reflectors = (reflectors
               .unpivot(index=["Reflector use", "Sex"], 
                        variable_name="age_group", 
                        value_name="percentage")
+            .sort("Reflector use", "Sex", "age_group")
 )
 reflectors.head()
 ```
 
 ## Plot reflector use by age and gender {.smaller}
+
+. . . 
+
+```{python}
+reflectors.get_column("Reflector use").unique().to_list()
+```
+
+. . . 
 
 ```{python}
 (reflectors
