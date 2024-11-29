@@ -6,6 +6,11 @@ This is a introductory workshop covering dataframes in Python with the [**pandas
 
 The main content is in the [dataframes.ipynb](dataframes.ipynb) Jupyter notebook. 
 
+- [Rendered notebook (dataframes.ipynb)](https://www.andybeger.com/dataframes-workshop/dataframes)
+- [Slides](https://www.andybeger.com/dataframes-workshop/dataframes-presentation.html)
+- [Dataframe library benchmarks (h2oai)](https://h2oai.github.io/db-benchmark/)
+
+
 ## Setup
 
 If you haven't worked with git/GitHub or Jupyter notebooks before, the easiest way is to use GitHub Codespaces to open [dataframes.ipynb](dataframes.ipynb).
